@@ -15,6 +15,15 @@ def Display_Ending(ending_name, ending_lore):
     input() # Wait for enter to continue
     main() # Loop back to start, leaving previous loops in memeory (bad)
 
+def Indecision_Check(indecision_score):
+    if indecision_score >= 5:
+        Display_Ending("BOR - Boring", [
+            "Look.",
+            "You have agreed to take this test, and you have agreed to answer honestly.",
+            "I'm just an ultra-intelligent AI with knowledge twice that of all of humanity combined, but you're giving me nothing.",
+            ""
+        ])
+
 # This is the basic question/answer function
 # Will be reused by wrappers that expand upon the basic function
 def Choice(question, answer1, answer2, answer3):
@@ -53,7 +62,7 @@ def Free_Write(question):
     print("----------------------------------")
     print(f"Question {question_num}: {question}")
     print("----------------------------------")
-    print("This is a free write question. Your answer will be shared to a server and judged to determine the most similar personaility type.") # lol no it won't
+    # print("This is a free write question. Your answer will be shared to a server and judged to determine the most similar personaility type.") # lol no it won't < moved to question
     return input("Your answer: ")
 
 def Display_Beginning():
@@ -82,11 +91,11 @@ def main():
     awkward_score = Targeted_Choice("How do you feel about long silences in conversations?", "I would rather stare into the other person's eyes than speak", "...", "I get very uncomfortable and try to fill the silence", 2)
     Choice("What motivates you?", "I want to be the best at what I do", "I want to be successful and make a good living", "I want to be happy and enjoy life")
     indecision = Targeted_Choice("Do you consider yourself an introvert or an extrovert?", "I am an introvert", "I don't know!", "I am an extrovert", 2)
-    agression = Targeted_Choice("How do you handle conflict?", "I confront it head on and try to resolve it", "I thrive in conflicts", "I avoid it at all costs", 2)
+    aggression = Targeted_Choice("How do you handle conflict?", "I confront it head on and try to resolve it", "I thrive in conflicts", "I avoid it at all costs", 2)
     indecision += Targeted_Choice("Do you feel more like yourself in the morning or night?", "Morning", "I don't know", "Night", 2)
     clinginess = Choice("How often do you persontify inanimate objects?", "Never", "Only if I use them often", "Every object in my room has a name")
     Choice("Do you trust automatic door?", "With my life", "I've never had a bad interaction with one", "My hatred towards machines isn't reserved just for AI")
-    agression += Choice("Are you aware of your own breathing right now?", "Hmm?", "I'm a little annoyed", "I am now, damn you!")
+    aggression += Choice("Are you aware of your own breathing right now?", "Hmm?", "I'm a little annoyed", "I am now, damn you!")
     Choice("Which of the following sounds like the most enjoyable weekend?", "Going out with friends", "Staying in and watching movies", "Going on an adventure")
     indecision += Targeted_Choice("Do you have a favorite side of the bed?", "Right", "I could never pick a favorite", "Left", 2)
     Choice("How many people do you think could recognize your footprints?", "I doubt anyone has it memorized", "Maybe a handful of people, but I don't know anyone specifically", "I know at least one person specifically who could recognize them")
@@ -114,6 +123,11 @@ def main():
     # Jump here if any previous answer is "incorrect"
     Choice("What is your favorite artistic medium?", "Painting", "Film", "Games")
     perfectionist = Choice("How many times do you reread a text or message before sending it?", "Once, if that", "A handful of times", "I could spend all day rewriting a single sentence")
+    t = Choice("At a four-way stop intersection, you and another person arrive at the same time. Who goes first?", "I assert dominance and go first", "I wait to see what the other person does", "I'd waive the other person through, I don't mind waiting")
+    if (t == 0):
+        aggression += 1
+    elif (t == 1):
+        indecision += 1
     liar = Targeted_Choice("Have you told the truth for this entire test?", "I lied one the first question to see the other endings", "I lied because I'm afraid you're going to sell my data to advertisers", "Nope, all truth!", 2)
 
     # The unlucky ending, 1 in 20 chance
@@ -145,6 +159,28 @@ def main():
             "Congrats, you got it! Now we're both just sitting here, a little uncomfortable, not sure what to say. I hope you're happy with yourself."
         ])
     procrastinator = Targeted_Choice("You are given a difficult task you must complete within a month, how do you approach it?", "Get it done as fast as possible", "Get a bit done one day at a time", "Get everything done in the last week", 3)
-    agression += Targeted_Choice("Somebow steals your lunch from the office fridge, how do you react?", "I poision the food so when they steal it again, they get their just reward", "I get really mad but don't say anything", "I just let it go, it's not worth the conflict", 1)
-               
+    aggression += Targeted_Choice("Somebow steals your lunch from the office fridge, how do you react?", "I poision the food so when they steal it again, they get their just reward", "I get really mad but don't say anything", "I just let it go, it's not worth the conflict", 1)
+    clinginess += Targeted_Choice("How do you feel if someone takes a while to get back to you after you message them?", "Message them until they get back to me", "I'm a little annoyed, but I understand that people can be busy", "Once the message has been sent, I no longer care", 1)
+    aggression += Targeted_Choice("Someone is being rude to you for no reason, how do you respond?", "I confront them and demand an explanation", "I get really mad but don't say anything", "I just let it go, it's not worth the conflict", 1)
+    liar += Targeted_Choice("If a dog spoke to you in perfect English, who would you tell?", "The authorities", "My closest confidant", "No one, I would pretend it didn't happen to seem sane", 3)
+    procrastinator += Targeted_Choice("How many browser tabs do you currently have open?", "1-5", "6-20", "I can no longer see the icons, only a sliver of the tab exists", 3)
+    # Me when I lie
+    Free_Write("This was originally going to be a choice question, but this will instead be a free write question to ensure you can express yourself fully. \nPlease note that an internet connection is required for this question as it the answer will be send an AI agent to assign a trait and also for sweet sweet training data. \n\nPlease describe, in fully detail, your personal belief system, philosophy, or morality system.\n")
+    edgy = Targeted_Choice("Choose your DnD class.", "Dead parents", "Furry", "Meta slave", 1)
+
+    # Defer check to bait the wrong conclusions ;)
+    if (aggression >= 4):
+        Display_Ending("BARB - Barbarian", [
+            "A tall human tribesman strides through a blizzard, draped in fur and hefting his axe.",
+            "He laughs as he charges toward the frost giant who dared poach his people’s elk herd.",
+            "A half-orc snarls at the latest challenger to her authority over their tribe, ready to break his neck with her bare hands as she did to the last six rivals.",
+            "Frothing at the mouth, a dwarf slams his helmet into the face of his drow foe, then turns to drive his armored elbow into the gut of another.",
+            "These barbarians, different as they might be, are defined by their rage: unbridled, unquenchable, and unthinking fury.",
+            "More than a mere emotion, their anger is the ferocity of a cornered predator, the unrelenting assault of a storm, the churning turmoil of the sea.",
+            "For some, their rage springs from a communion with fierce animal spirits. Others draw from a roiling reservoir of anger at a world full of pain.",
+            "For every barbarian, rage is a power that fuels not just a battle frenzy but also uncanny reflexes, resilience, and feats of strength.",
+            " " # empty line for formatting
+            "Hope you have a good constitution I guess."
+        ])
+
 main()
