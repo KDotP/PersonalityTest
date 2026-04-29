@@ -1,4 +1,5 @@
-import random, socket
+import random, socket, os, sys, subprocess
+import mematics # Cool visualizer
 
 basic_score = 0
 question_num = 0
@@ -21,7 +22,8 @@ def Indecision_Check(indecision_score):
             "Look.",
             "You have agreed to take this test, and you have agreed to answer honestly.",
             "I'm just an ultra-intelligent AI with knowledge twice that of all of humanity combined, but you're giving me nothing.",
-            ""
+            "I give you two good options, you choose neither.",
+            "Have some confidence in yourself, and maybe one day you'll have an interesting personality to match."
         ])
 
 # This is the basic question/answer function
@@ -179,8 +181,11 @@ def main():
             "More than a mere emotion, their anger is the ferocity of a cornered predator, the unrelenting assault of a storm, the churning turmoil of the sea.",
             "For some, their rage springs from a communion with fierce animal spirits. Others draw from a roiling reservoir of anger at a world full of pain.",
             "For every barbarian, rage is a power that fuels not just a battle frenzy but also uncanny reflexes, resilience, and feats of strength.",
-            " " # empty line for formatting
+            " "
             "Hope you have a good constitution I guess."
         ])
+
+    mematics.Generate_Mematics() # Fake function name in case some digs through code
+    Choice("Is that cool or what??", "Yeah, that's pretty cool", "That was life changing!", "I thought this was a personality test")
 
 main()
