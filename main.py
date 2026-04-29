@@ -2,7 +2,6 @@ import random, socket, os, sys, subprocess
 import mematics # Cool visualizer
 
 basic_score = 0
-question_num = 0
 
 def Display_Ending(ending_name, ending_lore):
     print("\n")
@@ -67,6 +66,71 @@ def Free_Write(question):
     # print("This is a free write question. Your answer will be shared to a server and judged to determine the most similar personaility type.") # lol no it won't < moved to question
     return input("Your answer: ")
 
+# Wrapper for free write which can test if a specific word is phrase in contained in answer
+# Search_for must be lowercase
+def Targeted_Free_Write(question, search_for):
+    ans = Free_Write(question).lower()
+    if (ans.find(search_for()) > -1):
+        return 1
+    else:
+        return 0
+
+# 2 question choice
+def Limited_Choice(question, answer1, answer2):
+    global question_num
+    question_num += 1
+    print("")
+    print("----------------------------------")
+    print(f"Question {question_num}: {question}")
+    print(f"1: {answer1}")
+    print(f"2: {answer2}")
+    print("----------------------------------")
+    while True:
+        choice = input("Your answer: ")
+        if choice == "1":
+            return 0
+        elif choice == "2":
+            return 1
+        else:
+            print("Invalid input. Please enter 1 or 2")
+
+# Mostly to make it easier to switch answer order
+# Wraps limited choice
+def Targeted_Limited_Choice(question, answer1, answer2, target_answer):
+    ref = Choice(question, answer1, answer2)
+    if ref == target_answer - 1: # Subtract 1 since an answer of 1 corresponds to a return value of 0
+        return 1
+    else:
+        return 0
+    
+def Big_Choice(question, answer_list):
+    global question_num
+    question_num += 1
+    answers_printed = 0 # Why is this the best way to get the length of a passed array?
+    print("")
+    print("----------------------------------")
+    print(f"Question {question_num}: {question}")
+    for i in range(answer_list):
+        print(f"{i+1}: {answer_list[i]}")
+        answers_printed += 1
+    print("----------------------------------")
+
+    if (answers_printed == 0):
+        print("Something went wrong, next question")
+        return -1
+
+    while True:
+        choice = input("Your answer: ")
+        # Can return decimals, but not both
+        if choice <= answers_printed:
+            try:
+                choice = int(choice)
+            except:
+                # Handle decimals
+                print("Something went wrong. Answer agin.")
+        else:
+            print("Invalid input. Enter a valid choice.")
+
 def Display_Beginning():
     print("Welcome to the world's only accurate personality test. This will be a grueling and difficult test, but if you can make it through, you will be provided with unprecidented incite into your very heart and soul.")
     print("The test will consist of a number of questions. Each question will have 3 possible answers. You will be asked to choose the answer that best describes you.")
@@ -75,6 +139,8 @@ def Display_Beginning():
     print("To begin, press enter.", end=" ")
 
 def main():
+    question_num = 0
+
     Display_Beginning()
     bread_rank = Choice("What are your thoughts on banana bread?", "It's not the worst", "I fear giving my true feelings", "Burn it in the holy flames")
     if bread_rank == 0:
@@ -96,7 +162,7 @@ def main():
     aggression = Targeted_Choice("How do you handle conflict?", "I confront it head on and try to resolve it", "I thrive in conflicts", "I avoid it at all costs", 2)
     indecision += Targeted_Choice("Do you feel more like yourself in the morning or night?", "Morning", "I don't know", "Night", 2)
     clinginess = Choice("How often do you persontify inanimate objects?", "Never", "Only if I use them often", "Every object in my room has a name")
-    Choice("Do you trust automatic door?", "With my life", "I've never had a bad interaction with one", "My hatred towards machines isn't reserved just for AI")
+    confidence = Choice("Do you trust automatic door?", "With my life", "I've never had a bad interaction with one", "My hatred towards machines isn't reserved just for AI")
     aggression += Choice("Are you aware of your own breathing right now?", "Hmm?", "I'm a little annoyed", "I am now, damn you!")
     Choice("Which of the following sounds like the most enjoyable weekend?", "Going out with friends", "Staying in and watching movies", "Going on an adventure")
     indecision += Targeted_Choice("Do you have a favorite side of the bed?", "Right", "I could never pick a favorite", "Left", 2)
@@ -187,5 +253,24 @@ def main():
 
     mematics.Generate_Mematics() # Fake function name in case some digs through code
     Choice("Is that cool or what??", "Yeah, that's pretty cool", "That was life changing!", "I thought this was a personality test")
+    liar += Targeted_Choice("How many ducks do you think you take in a fight assuming they all attack at the same time and you can't bring anything with you?", "I'd die against even one.", "Probably one or two. Maybe three if I can find a sharp twig.", "Unlimited ducks. I scale.", 3)
+    confidence += Choice("How often do you reflect on previous decisions?", "All the time. Gotta get the stats for my next run of life", "Sometimes, mostly unforseen circumstances so I'll be more prepared in the future", "Never. Why dwell on previous decisions when I always make the correct ones?")
+    compliant = Targeted_Free_Write("I totally forgot to ask before, do you consent to your data being sold to advertisers, AI companies, and the U.S. government? \nDue to pesky EU regulations, this cannot be a multiple choice question. \nPlease answer \"I consent\". Please.", "i consent")
+    t = Choice("Do you live in California?", "Yes", "I'll tell you later", "Thankfully no")
+    if (t == 1):
+        procrastinator += 1
+    elif (t == 0):
+        t = Limited_Choice("Do you like it there?", "I'd rather live in Colorado", "Yep!")
+        if t == 1:
+            t = Limited_Choice("Do you work in 3D animation?", "Nope", "These questions are getting a little personal")
+            if t == 1:
+                Display_Ending("ARIN - You are Arin", [
+                    "That's you! That's your name!",
+                    "Unless, of course, there are multiple people in California who work in 3D animation.",
+                    "But that doesn't seem likely.",
+                    "",
+                    "I guess you could also be lying.",
+                    "Or you rooted through the code to figure out how to get this result." # Yeah, but who'd do that?
+                ])
 
 main()
