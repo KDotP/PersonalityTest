@@ -2,6 +2,7 @@ import random, socket, os, sys, subprocess
 import mematics # Cool visualizer
 
 basic_score = 0
+question_num = 0
 
 def Display_Ending(ending_name, ending_lore):
     print("\n")
@@ -70,7 +71,7 @@ def Free_Write(question):
 # Search_for must be lowercase
 def Targeted_Free_Write(question, search_for):
     ans = Free_Write(question).lower()
-    if (ans.find(search_for()) > -1):
+    if (ans.find(search_for) > -1):
         return 1
     else:
         return 0
@@ -97,7 +98,7 @@ def Limited_Choice(question, answer1, answer2):
 # Mostly to make it easier to switch answer order
 # Wraps limited choice
 def Targeted_Limited_Choice(question, answer1, answer2, target_answer):
-    ref = Choice(question, answer1, answer2)
+    ref = Limited_Choice(question, answer1, answer2)
     if ref == target_answer - 1: # Subtract 1 since an answer of 1 corresponds to a return value of 0
         return 1
     else:
@@ -106,30 +107,22 @@ def Targeted_Limited_Choice(question, answer1, answer2, target_answer):
 def Big_Choice(question, answer_list):
     global question_num
     question_num += 1
-    answers_printed = 0 # Why is this the best way to get the length of a passed array?
     print("")
     print("----------------------------------")
     print(f"Question {question_num}: {question}")
-    for i in range(answer_list):
+    for i in range(len(answer_list)):
         print(f"{i+1}: {answer_list[i]}")
-        answers_printed += 1
     print("----------------------------------")
 
-    if (answers_printed == 0):
+    if (len(answer_list) == 0):
         print("Something went wrong, next question")
         return -1
 
     while True:
         choice = input("Your answer: ")
         # Can return decimals, but not both
-        if choice <= answers_printed:
-            try:
-                choice = int(choice)
-            except:
-                # Handle decimals
-                print("Something went wrong. Answer agin.")
-        else:
-            print("Invalid input. Enter a valid choice.")
+        if int(choice) <= len(answer_list):
+            return int(choice)
 
 def Display_Beginning():
     print("Welcome to the world's only accurate personality test. This will be a grueling and difficult test, but if you can make it through, you will be provided with unprecidented incite into your very heart and soul.")
@@ -139,6 +132,7 @@ def Display_Beginning():
     print("To begin, press enter.", end=" ")
 
 def main():
+    global question_num
     question_num = 0
 
     Display_Beginning()
@@ -256,6 +250,8 @@ def main():
     liar += Targeted_Choice("How many ducks do you think you take in a fight assuming they all attack at the same time and you can't bring anything with you?", "I'd die against even one.", "Probably one or two. Maybe three if I can find a sharp twig.", "Unlimited ducks. I scale.", 3)
     confidence += Choice("How often do you reflect on previous decisions?", "All the time. Gotta get the stats for my next run of life", "Sometimes, mostly unforseen circumstances so I'll be more prepared in the future", "Never. Why dwell on previous decisions when I always make the correct ones?")
     compliant = Targeted_Free_Write("I totally forgot to ask before, do you consent to your data being sold to advertisers, AI companies, and the U.S. government? \nDue to pesky EU regulations, this cannot be a multiple choice question. \nPlease answer \"I consent\". Please.", "i consent")
+    if (compliant == 0):
+        Limited_Choice("Consent not detected. Your request will be respected in 2-4 business days.", "Ok", "No, wait, please sell my data!")
     t = Choice("Do you live in California?", "Yes", "I'll tell you later", "Thankfully no")
     if (t == 1):
         procrastinator += 1
@@ -272,5 +268,27 @@ def main():
                     "I guess you could also be lying.",
                     "Or you rooted through the code to figure out how to get this result." # Yeah, but who'd do that?
                 ])
+
+    frog_name = "Placeholder Frog"
+    frog = Choice("Pick one of the following frogs. Your response will be recorded and send to the losing frogs.", "A distinguished frog in a tiny suit", "A loud but wonderful-sounding frog", "A frog that speaks english and is intelligent enough to have a decent conversation")
+    if (frog == 0):
+        frog_name = "Frogbert"
+    elif (frog == 1):
+        frog_name = "Frog Tuah"
+    elif (frog == 2):
+        frog_name = "Frogicular"
+    box_array = ["A small box", "A blue box", "A round box", "A brown box", "A tall box", "A box", "A box marked with \"danger\"", "A non-euclidean box", "A transparent box with a small diamond ring inside"]
+    box = Big_Choice("Choose a box. Your frog can check to see what is inside the box if you ask it to.", box_array)
+    box_name = box_array[box]
+    open_box = Targeted_Limited_Choice(f"Would you like your chosen frog, {frog_name}, to open your box? {box_name}?", "Yes", "No", 1)
+    if (open_box == 1 and box == 6):
+        Display_Ending("FGKL - Frog Killer", [
+            "You monster.",
+            "You sick monster.",
+            f"Your frog, {frog_name}, opened the box to find an open capsule of frog poison.",
+            f"{frog_name} is dead, and it's your doing.",
+            f"I'm sorry, but I just... I can't go any further into this test. Someone needs to give the eulogy at {frog_name}'s funeral.",
+            "Please, don't come back. The local frog population may never be the same after what you did."
+        ])
 
 main()
