@@ -272,7 +272,7 @@ def main():
 
     # IT'S FROG TIME BABY
     frog_name = "Placeholder Frog"
-    frog = Choice("Pick one of the following frogs. Your response will be recorded and send to the losing frogs.", "A distinguished frog in a tiny suit", "A loud but wonderful-sounding frog", "A frog that speaks english and is intelligent enough to have a decent conversation")
+    frog = Choice("Pick one of the following frogs. Your response will be recorded and send to the losing frogs.", "A distinguished frog in a tiny suit", "A cute frog in a knight outfit", "A frog that speaks english, but doesn't seem very smart")
     if (frog == 0):
         frog_name = "Frogbert"
     elif (frog == 1):
@@ -347,5 +347,32 @@ def main():
             ans = Targeted_Limited_Choice(f"Insie the box is... well, it's a small diamond ring. Huge surprise there. \nGive it to {frog_name}?", "Yes", "No", 1)
             if (ans == 1):
                 frog_name = "Fancy " + frog_name
+
+    # No more frog (for a few questions)
+    feedback = Targeted_Choice("Anonymous survey question: Do you feel that the answers posed thus far have been helpful in determining your personality? \nA free gift will be provided for your participation.", "Obviously", "Slightly", "Not really", 3)
+    if (feedback == 1):
+        Limited_Choice("It seems we are uh... out of gifts. No particular reason. Sorry.", "Okay", "I feel like I would have gotten something if I had given good feedback.")
+    gift_num = Choice("Thank you for your candid feedback. Please choose a gift as our way of thanking you for your honest, unbiased feedback.", f"The title \"Mr.\" for your frog, {frog_name}", "+1.38 ak_mm score (leads to an interesting personality)", "A steam game code")
+    if (gift_num == 0):
+        frog_name = "Mr. " + frog_name
+    elif (gift_num == 2):
+        # Me when I tell the truth
+        # It's Dead Island from a November 2018 humble bundle.
+        Limited_Choice("Your game code is: KH5BR-TQJRN-LLEN9. Please note that all customers are given the same code. Would you like to pass it on to the next person?", "No, all for me!", "Pass it on!")
+    Choice("What's your favorite animal?", "Bunny", "Cat", "Dog")
+    Choice("Which of the philosophical frameworks do you align with most closely?", "Utilitarianism", "Consequentialism", "Hedonism")
+    pilo_num = random.random
+    pilo_sub = "Errorism"
+    if (pilo_num < 0.25):
+        pilo_sub = "Nihilism"
+    elif (pilo_sub < 0.5):
+        pilo_sub = "Innatism"
+    elif (pilo_sub < 0.75):
+        pilo_sub = "Pyrrhonism"
+    else:
+        # Thank you wikipedia
+        pilo_sub = "Xenofeminism"
+    Limited_Choice(f"{frog_name} has brought you a different philosopical framework which it feels is more closely aligned to you: {pilo_sub}. \nWould you like to replace your answer with the one {frog_name} provided?", "Yes", "No")
+    perfectionist += Targeted_Choice("Do you believe something can be perfect?", "Can and should be", "It's relative", "Nothing can ever be perfect", 1)
 
 main()
