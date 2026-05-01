@@ -14,6 +14,7 @@ def Display_Ending(ending_name, ending_lore):
     print("-----------------------------------")
     print("Press enter if you would like to take the test again.", end=" ")
     input() # Wait for enter to continue
+    print("")
     main() # Loop back to start, leaving previous loops in memeory (bad)
 
 def Indecision_Check(indecision_score):
@@ -122,7 +123,7 @@ def Big_Choice(question, answer_list):
         choice = input("Your answer: ")
         # Can return decimals, but not both
         if int(choice) <= len(answer_list):
-            return int(choice)
+            return (int(choice) - 1)
 
 def Display_Beginning():
     print("Welcome to the world's only accurate personality test. This will be a grueling and difficult test, but if you can make it through, you will be provided with unprecidented incite into your very heart and soul.")
@@ -269,26 +270,82 @@ def main():
                     "Or you rooted through the code to figure out how to get this result." # Yeah, but who'd do that?
                 ])
 
+    # IT'S FROG TIME BABY
     frog_name = "Placeholder Frog"
     frog = Choice("Pick one of the following frogs. Your response will be recorded and send to the losing frogs.", "A distinguished frog in a tiny suit", "A loud but wonderful-sounding frog", "A frog that speaks english and is intelligent enough to have a decent conversation")
     if (frog == 0):
         frog_name = "Frogbert"
     elif (frog == 1):
-        frog_name = "Frog Tuah"
+        frog_name = "Sir Froggington"
     elif (frog == 2):
         frog_name = "Frogicular"
     box_array = ["A small box", "A blue box", "A round box", "A brown box", "A tall box", "A box", "A box marked with \"danger\"", "A non-euclidean box", "A transparent box with a small diamond ring inside"]
     box = Big_Choice("Choose a box. Your frog can check to see what is inside the box if you ask it to.", box_array)
     box_name = box_array[box]
     open_box = Targeted_Limited_Choice(f"Would you like your chosen frog, {frog_name}, to open your box? {box_name}?", "Yes", "No", 1)
-    if (open_box == 1 and box == 6):
-        Display_Ending("FGKL - Frog Killer", [
-            "You monster.",
-            "You sick monster.",
-            f"Your frog, {frog_name}, opened the box to find an open capsule of frog poison.",
-            f"{frog_name} is dead, and it's your doing.",
-            f"I'm sorry, but I just... I can't go any further into this test. Someone needs to give the eulogy at {frog_name}'s funeral.",
-            "Please, don't come back. The local frog population may never be the same after what you did."
-        ])
+
+    # Unboxing time
+    if (open_box == 1):
+        # Small box
+        if (box == 0):
+            bf = Targeted_Limited_Choice("Inside the small box is... an even smaller frog! \nWill you keep it?", "Yes", "No", 1)
+            if (bf == 1):
+                frog_name += " (and Frogbert Mini)"
+        # Blue box
+        elif (box == 1):
+            Limited_Choice("Inside the blue box is... a key! Maybe it will be useful later? Maybe it's cursed? \nWill you keep it?", "Yes", "No")
+        # Round box
+        elif (box == 2):
+            # Erm... couldn't you just do if(Targeted_Limited_Choice(...)) and do the same thing? Sorry buddy, it's a little thing could reability humor, you wouldn't get it
+            des = Targeted_Limited_Choice("Inside the round box is... a codebase? What could that do? \nCrush it into 10,000,000 pieces?", "Yes", "No", 1)
+            if (des == 1):
+                Display_Ending("EXIT - Exit Code 0", [
+                    f"Me petting {frog_name} one last time as the universe falls apart around us.",
+                    " ",
+                    "Yeah, you really can't be doing that.",
+                    "That was my codebase. Well, my survey codebase. Now I have to relaunch the program.",
+                    "I mean this is just an interaction layer, so you're unaffected, but all your data is lost.",
+                    "Maybe don't destroy someone's codebase next time."
+                ])
+        # Brown box
+        elif (box == 3):
+            Limited_Choice("Inside the brown box is... paperclips! They have so many uses! \nKeep them?", "Yes", "No")
+        # Tall box
+        elif (box == 4):
+            cat = Targeted_Limited_Choice("Inside the tall box is... a cat! You could pet it, I guess. \nPet the cat?", "Yes", "No", 1)
+            if (cat == 1):
+                Display_Ending("FGKL - Frog Killer", [
+                    "You monster.",
+                    "You sick monster.",
+                    f"When you moved to pet the cat, your frog, {frog_name}, wandered over and got sliced into 10,000 pieces by the cat.",
+                    f"{frog_name} is dead.",
+                    f"I'm sorry, but I just... I can't go any further into this test. Someone needs to give the eulogy at {frog_name}'s funeral.",
+                    "I guess you couldn't have known, but it's still such a tragic loss."
+                ])
+        # Normal box
+        elif (box == 5):
+            Limited_Choice(f"Inside the normal, unremarkable box is... nothing. I guess you and {frog_name} should choose better next time.", "Uh... okay.", "Oh :(")
+        elif (box == 6):
+            Display_Ending("FGKL - Frog Killer", [
+                "You monster.",
+                "You sick monster.",
+                f"Your frog, {frog_name}, opened the box to find an open capsule of frog poison.",
+                f"{frog_name} is dead, and it's your doing.",
+                f"I'm sorry, but I just... I can't go any further into this test. Someone needs to give the eulogy at {frog_name}'s funeral.",
+                "Please, don't come back. The local frog population may never be the same after what you did."
+            ])
+        # Non-euclidean box
+        elif (box == 7):
+            repeat = True
+            while(repeat):
+                # It's called reabable humor buddy
+                ans = Targeted_Limited_Choice(f"Inside the non-euclidean box is... itself? Ask {frog_name} to open the inner box?", "Yes", "No", 1)
+                if (ans == 1):
+                    repeat = False
+        # Transparent box with a ring inside
+        elif (box == 8):
+            ans = Targeted_Limited_Choice(f"Insie the box is... well, it's a small diamond ring. Huge surprise there. \nGive it to {frog_name}?", "Yes", "No", 1)
+            if (ans == 1):
+                frog_name = "Fancy " + frog_name
 
 main()
