@@ -322,7 +322,31 @@ def main():
     else:
         # Thank you wikipedia
         pilo_sub = "Xenofeminism"
+    
     Choice(f"{frog_name} has brought you a different philosopical framework which it feels is more closely aligned to you: {pilo_sub}. \nWould you like to replace your answer with the one {frog_name} provided?", "Yes", "No")
     perfectionist += Choice("Do you believe something can be perfect?", "Can and should be", "It's relative", "Nothing can ever be perfect", target=1)
+    evil = Choice("How much money would \"enough\" for you?", "I'd work for free if I didn't have any expenses", "I expect fair compensation for my work", "I want to be wealthier than the average person", "I want to be rich, even if it comes at the cost of others", "I want to be richer than god and I'm willing to be the next Elon Musk to do it", target=5)
+    evil += Choice("Let's discuss the famous trolley problem. \nAn unstoppable trolley is rolling down a path. On its current track, it will hit five people, killing them. \nYou currently stand next to a lever than could switch the trolley's path. On the other path, it would kill one person. \nRather than a simple binary choice, which reasoning resonates most to you?", "I don't flip the switch because doing so would be active involvement, making me responsible for the death.", "I flip the switch so as to save as many lives as possible.", "I flip the switch because it is the right thing to do, and what the people on the track would expect me to do.", "I do not flip the switch since the person on the other track is not required to make a sacrifice for the 'greater good'.", "I do not flip the switch since doing so would result in killing someone, which goes against the rules of society.", "I accept whichever choice I come up with first. Philosophy is just justifying the first thing that comes to mind.", "I do not flip the switch so as to kill the most people.", "I refuse to decide because I do not believe one person's life can be weighed against another's.", "I do not intervene because I may not understand the full situation, and acting could make this worse.", target=7)
+    Choice("If the person on the other track were someone you know and care about, would your answer change?", "No, I maintain full moral conviction.", "Yes, I think circumstances alter my moral view.", "No, even if it changes my view, I was already choosing the answer that aligns with my corrected view.")
+    Choice("You are a surgeon. \nYou have five otherwise healthy patients who would be able to live a full life if they were each able to get an organ transplant. \nBefore you is one healthy person whose organs could be used to save the five other patients. Doing so would kill them. \nDo you feel your answer would change compared to the trolley problem?", "No, these are essentially the same question.", "Yes, this version involves the active taking of a life rather than a passive one.", "No, even if the circumstances are different, my answer would still remain the same.", "Yes, I do not feel I could take a life with my own hands.")
+    
+    frog_happiness = Choice(f"You are now aboard the trolley with the ability to change tracks. One problem: you can't reach the switch. \n{frog_name} looks up at you and explains that he would be able to reach the lever if throw him. \nThe other track is empty, but the force of the turn would throw {frog_name} out of the trolley and to his death. Do you sacrifice his life to save the people? \nNote that this is only theoretical and neither answer will kill him.", "Yes", "No", target=2)
+    frog_location = Choice(f"{frog_name} has gotten bored of all these philosophy questions and wants to go out somewhere. He'll be back later, though. Where should he go?", "Steve's Adventuring Shop", "The Frog Spa", "The Library", "A Freelance Frogging Gig")
+    # These would be easier with switches, but not everyone has the right python version
+    if (ans == 0): # Adventuring shop
+        frog_location = "the adventuring shop"
+        # start an adventuring mini-game later
+    elif (ans == 1): # Frog spa
+        frog_location = "the spa"
+        frog_happiness += 1
+        # just boosts happiness and makes your frog feel refreshed :)
+    elif (ans == 2): # The library
+        frog_location = "the library"
+        # find the answer string to a future or past question
+    elif (ans == 3): # Freelance gig
+        frog_location = "his freelance gig"
+        # gives worthless frog bucks at the end, maybe reduces frog happiness?
+
+    
 
 main()
