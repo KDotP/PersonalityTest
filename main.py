@@ -130,19 +130,19 @@ def Display_Beginning():
     print("The test will consist of a number of questions. Each question will have 3 possible answers. You will be asked to choose the answer that best describes you.")
     print("To answer a question, simply type the number of the answer you choose and press enter. For example, if you choose the first answer, you would type '1' and press enter.")
     print("Please do not type any other characters or words, as the such an answer will be rejected and you will be asked to answer the question again.")
-    print("To begin, press enter.", end=" ")
+    print("To begin, press enter.")
 
 def main():
     global question_num
     question_num = 0
 
     Display_Beginning()
-    bread_rank = Choice("What are your thoughts on banana bread?", "It's not the worst", "I fear giving my true feelings", "Burn it in the holy flames")
+    bread_rank = Choice("What are your thoughts on cornbread?", "It's not the worst", "I fear giving my true feelings", "Burn it in the holy flames")
     if bread_rank == 0:
-        Display_Ending("RAT - Vermin", [
-            "You are lesser than man. Merely vermin among beasts. You are a blight upon the world and a stain on the name of humanity.",
-            "No one will mourn your passing. Some may even rejoice. To name your positivities would be an empty page, to name your negativities would require so many lines it would take week to compile.",
-            "Do not pass go. Do not collect $200. Do not attempt to cheat the truth by changing your answers. You are a rat, and history will remember you as such."
+        Display_Ending("DIS - Dissapointing", [
+            "Appologies, but as an advanced personality-determining AI, I have been instructed to bar individuals that may be considered a \"public nuisance\" from taking the test.",
+            "Unfortunately (for you), the cornbread index is a recognized metric in personality testing, closely aligned with the worst among humanity.",
+            "You may opt to try again if your belief in cornbread is less than full."
         ])
     
     # Do not record score, I do not care
@@ -361,7 +361,7 @@ def main():
         Limited_Choice("Your game code is: KH5BR-TQJRN-LLEN9. Please note that all customers are given the same code. Would you like to pass it on to the next person?", "No, all for me!", "Pass it on!")
     Choice("What's your favorite animal?", "Bunny", "Cat", "Dog")
     Choice("Which of the philosophical frameworks do you align with most closely?", "Utilitarianism", "Consequentialism", "Hedonism")
-    pilo_num = random.random
+    pilo_num = random.random()
     pilo_sub = "Errorism"
     if (pilo_num < 0.25):
         pilo_sub = "Nihilism"
