@@ -42,6 +42,7 @@ def Choice(question, *answers, target=None):
         print("Something went wrong, next question")
         return -1
 
+    # advanced python stuff I had to google so I'm not explaining it
     for i, answer in enumerate(answers):
         print(f"{i + 1}: {answer}")
     print("----------------------------------")
@@ -325,8 +326,8 @@ def main():
     
     Choice(f"{frog_name} has brought you a different philosopical framework which it feels is more closely aligned to you: {pilo_sub}. \nWould you like to replace your answer with the one {frog_name} provided?", "Yes", "No")
     perfectionist += Choice("Do you believe something can be perfect?", "Can and should be", "It's relative", "Nothing can ever be perfect", target=1)
-    evil = Choice("How much money would \"enough\" for you?", "I'd work for free if I didn't have any expenses", "I expect fair compensation for my work", "I want to be wealthier than the average person", "I want to be rich, even if it comes at the cost of others", "I want to be richer than god and I'm willing to be the next Elon Musk to do it", target=5)
-    evil += Choice("Let's discuss the famous trolley problem. \nAn unstoppable trolley is rolling down a path. On its current track, it will hit five people, killing them. \nYou currently stand next to a lever than could switch the trolley's path. On the other path, it would kill one person. \nRather than a simple binary choice, which reasoning resonates most to you?", "I don't flip the switch because doing so would be active involvement, making me responsible for the death.", "I flip the switch so as to save as many lives as possible.", "I flip the switch because it is the right thing to do, and what the people on the track would expect me to do.", "I do not flip the switch since the person on the other track is not required to make a sacrifice for the 'greater good'.", "I do not flip the switch since doing so would result in killing someone, which goes against the rules of society.", "I accept whichever choice I come up with first. Philosophy is just justifying the first thing that comes to mind.", "I do not flip the switch so as to kill the most people.", "I refuse to decide because I do not believe one person's life can be weighed against another's.", "I do not intervene because I may not understand the full situation, and acting could make this worse.", target=7)
+    edgy += Choice("How much money would \"enough\" for you?", "I'd work for free if I didn't have any expenses", "I expect fair compensation for my work", "I want to be wealthier than the average person", "I want to be rich, even if it comes at the cost of others", "I want to be richer than god and I'm willing to be the next Elon Musk to do it", target=5)
+    edgy += Choice("Let's discuss the famous trolley problem. \nAn unstoppable trolley is rolling down a path. On its current track, it will hit five people, killing them. \nYou currently stand next to a lever than could switch the trolley's path. On the other path, it would kill one person. \nRather than a simple binary choice, which reasoning resonates most to you?", "I don't flip the switch because doing so would be active involvement, making me responsible for the death.", "I flip the switch so as to save as many lives as possible.", "I flip the switch because it is the right thing to do, and what the people on the track would expect me to do.", "I do not flip the switch since the person on the other track is not required to make a sacrifice for the 'greater good'.", "I do not flip the switch since doing so would result in killing someone, which goes against the rules of society.", "I accept whichever choice I come up with first. Philosophy is just justifying the first thing that comes to mind.", "I do not flip the switch so as to kill the most people.", "I refuse to decide because I do not believe one person's life can be weighed against another's.", "I do not intervene because I may not understand the full situation, and acting could make this worse.", target=7)
     Choice("If the person on the other track were someone you know and care about, would your answer change?", "No, I maintain full moral conviction.", "Yes, I think circumstances alter my moral view.", "No, even if it changes my view, I was already choosing the answer that aligns with my corrected view.")
     Choice("You are a surgeon. \nYou have five otherwise healthy patients who would be able to live a full life if they were each able to get an organ transplant. \nBefore you is one healthy person whose organs could be used to save the five other patients. Doing so would kill them. \nDo you feel your answer would change compared to the trolley problem?", "No, these are essentially the same question.", "Yes, this version involves the active taking of a life rather than a passive one.", "No, even if the circumstances are different, my answer would still remain the same.", "Yes, I do not feel I could take a life with my own hands.")
     
@@ -347,6 +348,29 @@ def main():
         frog_location = "his freelance gig"
         # gives worthless frog bucks at the end, maybe reduces frog happiness?
 
+    Choice("You purchase an item from a vending machine, but it gets stuck. What do you do?", "Call or search for someone to help you", "Shake the machine in the hopes it drops the item", "Sigh and walk away")
+    Choice("You're getting a little eepy. Do you take a nap?", "Yes, I want to feel well rested", "No, I have better things to do with my time", "No, I don't believe in naps")
+    confidence += Choice("A friend invites you to a party. When you get there, you're informed your friend couldn't make. What do you do?", "No big deal, I'll go socialize with some strangers for a bit", "I'll talk to some of my friend's friends", "I'll find a pet to hang out with for a bit", "I'm just gonna go", target=1)
     
+    # Starting to up the number of offramps here since the number of questions is getting long
+
+    if ((confidence + edgy) >= 5): # Max value of either is 3 thus far
+        Display_Ending("VILN - Confidently Evil", [
+            "Since you were a child, you always saw the world for what it was: an oppertunity.",
+            "You take the last slice of pizza, but don't throw away the box. Every small slight is added to your book of grudges.",
+            "Normally, some judgement is justified for the evil types, but with such confidence, it's hard to fault you.",
+            "Just, please, for all of us, don't buy any islands. We've seen how that ends.",
+            "You might be well suited for politics, at least."
+        ])
+    elif (confidence == 0 and edgy >= 2):
+        Display_Ending("ROUG - Coniving Foe", [
+            "Since you were a child, you were lurking in the shadows, waiting for the opperunity to strike.",
+            "In every DnD game, you play a rouge with dead parents. Probably assassin too.",
+            "You plan, you plot, you probably have a plan for if you woke up tomorrow as the president.",
+            "Since your personality matrix indicates a low confidence, you probably weren't invited to the island, so at least you've got that going for you."
+        ])
+
+    indecision += Choice("Is Pluto a planet?", "Is and always was", "It's too difficult to choose an answer definitively", "Unless Europa is a planet, Pluto isn't either", "I blindly trust the globeheads at NASA to come up with my opinions for me", target=2)
+
 
 main()

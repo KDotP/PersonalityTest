@@ -1,5 +1,5 @@
 import math, time, sys
-max_reps = 125 # Search depth
+max_reps = 125 # depth
 
 # For testing ;)))
 def main():
@@ -12,13 +12,13 @@ def Generate_Mematics():
     # Width needs to be roughly double the height
     width, height = 60, 30
 
-    # 1. Personality vectors
+    # Vectors
     vertices = [
         [-1, -1, -1], [1, -1, -1], [1, 1, -1], [-1, 1, -1],
         [-1, -1, 1], [1, -1, 1], [1, 1, 1], [-1, 1, 1]
     ]
 
-    # 2. Personality limits
+    # 2. Limits
     edges = [
         (0, 1), (1, 2), (2, 3), (3, 0),
         (4, 5), (5, 6), (6, 7), (7, 4),
