@@ -335,7 +335,7 @@ def main():
     frog_location = Choice(f"{frog_name} has gotten bored of all these philosophy questions and wants to go out somewhere. He'll be back later, though. Where should he go?", "Steve's Adventuring Shop", "The Frog Spa", "The Library", "A Freelance Frogging Gig")
     # These would be easier with switches, but not everyone has the right python version
     if (ans == 0): # Adventuring shop
-        frog_location = "the adventuring shop"
+        frog_location = "adventuring shop 1" # name for easier reference
         # start an adventuring mini-game later
     elif (ans == 1): # Frog spa
         frog_location = "the spa"
@@ -346,6 +346,7 @@ def main():
         # find the answer string to a future or past question
     elif (ans == 3): # Freelance gig
         frog_location = "his freelance gig"
+        frog_happiness -= 1
         # gives worthless frog bucks at the end, maybe reduces frog happiness?
 
     Choice("You purchase an item from a vending machine, but it gets stuck. What do you do?", "Call or search for someone to help you", "Shake the machine in the hopes it drops the item", "Sigh and walk away")
@@ -372,5 +373,52 @@ def main():
 
     indecision += Choice("Is Pluto a planet?", "Is and always was", "It's too difficult to choose an answer definitively", "Unless Europa is a planet, Pluto isn't either", "I blindly trust the globeheads at NASA to come up with my opinions for me", target=2)
 
+    # frog be back
+    frog_bucks = 0
+    if (frog_location == "adventuring shop 1"):
+        ans = Choice(f"{frog_name} has returned from the adventuring shop! \nWhile there, he found a bunch of cool adventuring gear. He says that if you can give him some frog money to buy the gear, he'll be able to go on an adventure! \nGive {frog_name} some of your frog bucks?", "Take my frog bucks!", "An adventure would be too dangerous", "I don't have any frog bucks", target=1)
+        frog_bucks -= 5
+        frog_location = "adventuring shop 2"
+    elif (frog_location == "the spa"):
+        Choice(f"{frog_name} returned from the spa! He looks very happy and well taken care of.", "Ok")
+    elif (frog_location == "the library"):
+        ans = Choice(f"{frog_name} has returned from the library! While there, he found a new personality which he thinks fits you. Take it?", "Yes", "No, he can keep it for himself", target=1)
+        if (ans == 1):
+            Display_Ending("SCLR - Studious Scholar", [
+                "Curiosity rules your life, driving to you always know more. Passing a mundane object on the street leads you to wonder the process which brought there, and the history of it.",
+                "Wikipedia is most likely bookmarked in your browser, and you make good use of it. Any question you have must have an answer which you will uncover after browsing through a dozen unrelated articles.",
+                "You've likely read a fair few books in your lifetime across countless subjects and genres.",
+                "Perhaps a career in academia would suit you well. After all, being smart doesn't always mean being smart enough to avoid student loans."
+            ])
+    elif (frog_location == "his freelance gig"):
+        ans = Choice(f"{frog_name} has returned from his freelance gig. He wants you to take 5 frog bucks as thanks for taking care of him. \nDo you accept some of his frog bucks?", "Yes, I'll hold on to them in case I need them later", f"Yes, I'll use them now to buy a nice scarf for {frog_name}", f"No, enjoy the spoils of hard work, {frog_name}")
+        if (ans == 0):
+            frog_bucks += 5 # find something to use this?
+        elif (ans == 1):
+            frog_name += " (distinguished)"
+        elif (ans == 2):
+            frog_happiness += 1 # recover lost happiness, add more later?
+    else:
+        Choice(f"Something went wrong with {frog_name}'s return. Please report this to the developer since something was probably incorrectly configured.", "Ok, I will")
+
+    perfectionist += Choice("How quickly do you adjust to new challenging situations?", "Quickly, I waste no time and hit the ground running", "Slowly, I want to step back and take everything in before I jump in", "Passively, I step in immediately and slowly soak everything in", target=2)
+    hubris = Choice("When you come up with a solution for a problem, how do you impliment it?", "Press send and on to the next thing, I trust that I got it right the first time", "Press send, then monitor until I can trust everything went right", "Check and recheck a dozen times before sending, then monitoring until I'm confident it worked", target=1)
+    clinginess += Choice("How much time do you like to spend with friends?", "As much as possible, there are few minutes in the day where I'm not at least chatting in someone's dms", "I try to spend some time with friends at least once per day", "I'm content with spending time with friends once or a few times per week", "I let everyone else set my tempo", target=1)
+
+    if ((clinginess + perfectionist) >= 5): # total max of each is 3
+        Display_Ending("AGLR - Male Angler Fish", [
+            "You plan your day with a calendar, carefully determining how to fit just one more thing into your schedule.",
+            "When a friend asks you to hang out, you never say 'no', you just figure out their time slot.",
+            "From the moment you wake up, you're getting ready to spend time with all your appointments for the day.",
+            "At a certain point, you become a culmination of all your friends as setting your own personality becomes difficult.",
+            "You're probably planning a career in event planning. Or as a pretty bad manager."
+        ])
+    elif (clinginess >= 2 and indecision >= 3):
+        Display_Ending("UNCN - The Planning Friend", [
+            "You want to spend time with friends, but you don't know how.",
+            "When someone asks you to hang out some time, you spend the next hour deciding where to go and what to do.",
+            "Everyone trusts you to plan each event since you're so thorough in your planning.",
+            "You probably work in tech."
+        ])
 
 main()
