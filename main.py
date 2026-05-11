@@ -1,5 +1,6 @@
 import random, socket, os, sys, subprocess
 import mematics # Cool visualizer
+import submenu # Dungeon
 
 basic_score = 0
 question_num = 0
@@ -378,7 +379,8 @@ def main():
     if (frog_location == "adventuring shop 1"):
         ans = Choice(f"{frog_name} has returned from the adventuring shop! \nWhile there, he found a bunch of cool adventuring gear. He says that if you can give him some frog money to buy the gear, he'll be able to go on an adventure! \nGive {frog_name} some of your frog bucks?", "Take my frog bucks!", "An adventure would be too dangerous", "I don't have any frog bucks", target=1)
         frog_bucks -= 5
-        frog_location = "adventuring shop 2"
+        if (ans == 1):
+            frog_location = "adventuring shop 2"
     elif (frog_location == "the spa"):
         Choice(f"{frog_name} returned from the spa! He looks very happy and well taken care of.", "Ok")
     elif (frog_location == "the library"):
@@ -420,5 +422,8 @@ def main():
             "Everyone trusts you to plan each event since you're so thorough in your planning.",
             "You probably work in tech."
         ])
+
+    empath = Choice("Do you view other people's happiness as your responsibilty?", "I would sacrifice my own happiness to make someone else happy", "I will do what I can to make other people happy, but not at a cost to myself", "I will do what I can to make people happy, but I won't go out of my way to do so", "I've got too many things to worry about with my own happiness, nonetheless someone else's", target=1)
+
 
 main()
