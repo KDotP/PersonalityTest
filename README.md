@@ -8,13 +8,21 @@ This is the source code. If you wish to run yourself, see below. Otherwise, a pr
 
 ---
 
+## Spoilers
+
+Since this is the bare code, if you are planning on taking the test you are highly advised **against** checking through files.
+
+Several small hints and details are contained in the code which may deminish the suprise associated with coming upon them naturally.
+
+---
+
 ## How to Run
  
-**Note that this version is the source code. A prebuilt version should be provided to you. Ensure you know what you are doing before downloading or running any files.**
+**Note that this version is the source code. A prebuilt version should be provided to you. Ensure you know what you are doing before using the terminal or running any files.**
 
 This program runs in Python. Follow the steps below for your operating system.
 
-*If you already have Python installed and know how to launch Python files, you may choose to skip these steps.*
+*If you already have Python installed and know how to launch Python files, you may choose to skip to Step 4*
  
 ---
  
@@ -46,7 +54,11 @@ sudo apt install python3
  
 ### Step 2 — Download the program
  
-Download `main.py` and save it somewhere you can find it, like your Desktop or a folder called `personality-test`.
+Navigate to the `<> Code` section in the top right of the Github page.
+
+From the dropdown menu, select `Download ZIP`
+
+To run files, unzip the downloaded program to an accessable location such as your desktop.
  
 ---
  
@@ -88,7 +100,7 @@ The test will start in the terminal window. Type the number of your answer and p
  
 **"Python is not recognized" (Windows)** — You likely missed the "Add Python to PATH" checkbox during installation. Uninstall Python and reinstall it, making sure to check that box.
  
-**"No module named 'mematics'" (all platforms)** — This is expected if you're running the program outside of its intended environment. Let whoever gave you this know.
+**"No module named 'X'" (all platforms)** — This is expected if you're running the program outside of its intended environment. Let whoever gave you this know.
  
 **The terminal closes immediately** — You probably double-clicked `main.py`, you may have to run it through the terminal instead. Go back to Step 3.
  
