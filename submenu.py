@@ -116,6 +116,55 @@ DRAGON_FLYING_CLOSE = r"""
                                '.__)
 """
 
+# Sourced via https://www.asciiart.eu/art/627363361eda1a20, author unknown
+UNICORN_STATIC = r"""
+                              /
+                   __       //
+                   -\= \=\ //
+                 --=_\=---//=--
+               -_==/  \/ //\/--
+                ==/   /O   O\==--
+   _ _ _ _     /_/    \  ]  /--
+  /\ ( (- \    /       ] ] ]==-
+ (\ _\_\_\-\__/     \  (,_,)--
+(\_/                 \     \-
+\/      /       (   ( \  ] /)
+/      (         \   \_ \./ )
+(       \         \      )  \
+(       /\_ _ _ _ /---/ /\_  \
+ \     / \     / ____/ /   \  \
+  (   /   )   / /  /__ )   (  )
+  (  )   / __/ '---`       / /
+  \  /   \ \             _/ /
+  ] ]     )_\_         /__\/
+  /_\     ]___\
+ (___)
+"""
+
+# Sourced via https://www.asciiart.eu/art/b73d333aa387ff07, author Tua Xiong, modified
+UNICORN_CHARGING = r"""
+              ,,))))))));,
+           __)))))))))))))),
+\|/       -\(((((''''((((((((.
+-*-==//////((''  .     `)))))),
+/|\      ))| o    ;-.    '(((((                                  ,(,
+         ( `|    /  )    ;))))'                               ,_))^;(~
+            |   |   |   ,))((((_     _____------~~~-.        %,;(;(>';'~
+            o__;   ;    )))(((` ~---~  `::           \      %%~~)(v;(`('~
+                  ;    ''''````         `:       `:::|\,__,%%    );`'; ~
+                 |   _                )     /      `:|`----'     `-'
+           ______/\/~    |                 /        /
+         /~;;.____/;;'  /          ___--,-(   `;;;/
+        / //  _;______;'------~~~~~    /;;/\    /
+       //  | |                        / ;   \;;,\
+      (<_  | ;                      /',/-----'  _>
+       \_| ||_                     //~;~~~~~~~~~
+           `\_|                   (,~~
+                                   \~\
+                                    ~~
+"""
+
+LINE_BREAK = "──────────────────────────────────────────────────────────"
 
 def Minigame(frog_name):
     slow_print("You enter the dungeon, the cold and dank air hitting your nose immediately.")
@@ -164,18 +213,17 @@ def pause(secs=0.7):
     time.sleep(secs)
 
 def hp_bar(current, maximum):
-    bar = ''
+    bar = '['
     for i in range(maximum):
         if(i < current):
             bar += '█'
         else:
             bar += '░'
-    bar += f" {current}/{maximum}"
+    bar += f"] {current}/{maximum}"
     return bar
 
 def main():
     print("Main Testing Function")
-    print(hp_bar(5, 10))
     Minigame("Testing Frog")
 
 main()

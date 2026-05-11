@@ -54,11 +54,9 @@ sudo apt install python3
  
 ### Step 2 — Download the program
  
-Navigate to the `<> Code` section in the top right of the Github page.
-
-From the dropdown menu, select `Download ZIP`
-
-To run files, unzip the downloaded program to an accessable location such as your desktop.
+1. Navigate to the `<> Code` section in the top right of the Github page.
+2. From the dropdown menu, select `Download ZIP`
+3. To run files, unzip the downloaded program to an accessable location such as your desktop.
  
 ---
  
