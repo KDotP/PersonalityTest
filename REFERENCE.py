@@ -26,6 +26,54 @@ CORRIDOR_SPLIT = r"""
 |;____________/%%%%%%%%%%%%%%%%%\____________;|
 """
 
+# Sourced via https://www.asciiart.eu/art/23319246a6009130, author Tim Spicer (Darkstar), modified
+CORRIDOR_BRANCHING = r"""
+ _____________________________________________
+|.'',                                     ,''.|
+|.'.'',                                 ,''.'.|
+|.'.'.'',                             ,''.'.'.|
+|.'.'.'.'',                         ,''.'.'.'.|
+|.'.'.'.'.|                         |.'.'.'.'.|
+|.'.'.'.'.|===;                 ;===|.'.'.'.'.|
+|.'.'.'.'.|:::|',             ,'|:::|.'.'.'.'.|
+|.'.'.'.'.|---|'.|, _______ ,|.'|---|.'.'.'.'.|
+|.'.'.'.'.|:::|'.|'|-|   |-|'|.'|:::|.'.'.'.'.|
+|,',',',',|---|',|'|-|  .|-|'|,'|---|,',',',',|
+|.'.'.'.'.|:::|'.|'|-|   |-|'|.'|:::|.'.'.'.'.|
+|.'.'.'.'.|---|','   /%%%\   ','|---|.'.'.'.'.|
+|.'.'.'.'.|===:'    /%%%%%\    ':===|.'.'.'.'.|
+|.'.'.'.'.|%%%%%%%%%%%%%%%%%%%%%%%%%|.'.'.'.'.|
+|.'.'.'.','       /%%%%%%%%%\       ','.'.'.'.|
+|.'.'.','        /%%%%%%%%%%%\        ','.'.'.|
+|.'.','         /%%%%%%%%%%%%%\         ','.'.|
+|.','          /%%%%%%%%%%%%%%%\          ','.|
+|;____________/%%%%%%%%%%%%%%%%%\____________;|
+"""
+
+# Sourced via https://www.asciiart.eu/art/23319246a6009130, author Tim Spicer (Darkstar), heavily modified
+CORRIDOR_STRAIGHT = r"""
+ _____________________________________________
+|.'',                                     ,''.|
+|.'.'',                                 ,''.'.|
+|.'.'.'',                             ,''.'.'.|
+|.'.'.'.'',                         ,''.'.'.'.|
+|.'.'.'.'.'',                     ,''.'.'.'.'.|
+|.'.'.'.'.'.'',                 ,''.'.'.'.'.'.|
+|.'.'.'.'.'.'.'',             ,''.'.'.'.'.'.'.|
+|.'.'.'.'.'.'.'.'',         ,''.'.'.'.'.'.'.'.|
+|.'.'.'.'.'.'.'.'.'',     ,''.'.'.'.'.'.'.'.'.|
+|,',',',',',',',',','  ^  ',',',',',',',',',',|
+|.'.'.'.'.'.'.'.'.'   /%\   '.'.'.'.'.'.'.'.'.|
+|.'.'.'.'.'.'.','    /%%%\    ','.'.'.'.'.'.'.|
+|.'.'.'.'.'.','     /%%%%%\     ','.'.'.'.'.'.|
+|.'.'.'.'.','      /%%%%%%%\      ', .'.'.'.'.|
+|.'.'.'.','       /%%%%%%%%%\       ','.'.'.'.|
+|.'.'.','        /%%%%%%%%%%%\        ','.'.'.|
+|.'.','         /%%%%%%%%%%%%%\         ','.'.|
+|.','          /%%%%%%%%%%%%%%%\          ','.|
+|;____________/%%%%%%%%%%%%%%%%%\____________;|
+"""
+
 # Sourced via https://www.asciiart.eu/art/619e9b9cbc49d3c1, author Shanaka Dias
 DRAGON_REELING = r"""
              __                  __
@@ -117,6 +165,62 @@ DRAGON_CHARGING = r"""
                                '.__)
 """
 
+# Sourced via https://www.asciiart.eu/art/0af5287cc6a700df, author BluePard
+GRYPHON_STATIC = r"""
+                 /i
+                //,
+               ///i 
+             ,/ ).'i    
+              |   )-i  
+              |   )i 
+              '   )i
+             /    |- 
+        _.-./-.  /z_ 
+         `-. >._\ _ );i.
+          / `-'/`k-'`u)-'`
+         /    )-     
+  ,.----'   ) '                       
+  /      )1`  
+ ///v`-v\v        
+/v
+"""
+
+# Sourced via https://www.asciiart.eu/art/1439a2d47a4340e2, authors John van der Zwaag / VanderZwaag / Vanderz
+GRYPHON_REELING = r"""
+                        ______
+             ______,---'__,---'
+         _,-'---_---__,---'
+  /_    (,  ---____',
+ /  ',,   `, ,-'
+;/)   ,',,_/,'
+| /\   ,.'//\
+`-` \ ,,'    `.
+     `',   ,-- `.
+     '/ / |      `,         _
+     //'',.\_    .\\      ,{==>-
+  __//   __;_`-  \ `;.__,;'
+((,--,) (((,------;  `--'
+```  '   ```
+"""
+
+# Sourced via https://www.asciiart.eu/art/0dfe2a759afdcfd7, author Joan G. Stark (Spunk)
+GRYPHON_CHARGING = r"""
+        _____,    _..-=-=-=-=-====--,
+     _.'a   /  .-',___,..=--=--==-'`
+    ( _     \ /  //___/-=---=----'
+     ` `\    /  //---/--==----=-'
+  ,-.    | / \_//-_.'==-==---='
+ (.-.`\  | |'../-'=-=-=-=--'
+  (' `\`\| //_|-\.`;-~````~,        _
+       \ | \_,_,_\.'        \     .'_`\
+        `\            ,    , \    || `\\
+          \    /   _.--\    \ '._.'/  / |
+          /  /`---'   \ \   |`'---'   \/
+         / /'          \ ;-. \
+      __/ /           __) \ ) `|
+    ((='--;)         (,___/(,_/
+"""
+
 # Sourced via https://www.asciiart.eu/art/627363361eda1a20, author unknown
 UNICORN_STATIC = r"""
                               /
@@ -183,7 +287,7 @@ UNICORN_REELING = r"""
            \ r-7  `-. ._  ' .  `\
             \`,      `-.`7  7)   )
              \/         \|  \'  / `-._
-                        ||    .'
+                        ||    .'      `
                          \\  (
                           >\  >
                       ,.-' >.'
@@ -196,7 +300,7 @@ combat_events = {
     # --- Clashes ---
     ("s", "s"): {
         "lines": [
-            ("Both you and the beast lunge viciously at each other, your blade meeting its horn."),
+            ("Both you and the beast lunge viciously at each other, your blade meeting its own strike."),
             ("Neither you nor the beast can overcome the other's strength and instead prepare the next attack."),
         ],
         "result": "clash",
@@ -272,11 +376,10 @@ combat_events = {
     },
 
     # --- Advantage Actions ---
-
     ("c", "r"): {
         "lines": [
-            ("The beast retreats, but you're already moving, you blade high."),
-            ("You blade plunges into flesh, blood already flowing freely from the fresh wound."),
+            ("The beast retreats, but you're already moving, your blade high."),
+            ("Your blade plunges into flesh, blood already flowing freely from the fresh wound."),
             ("The beast can only retreat further, drawing the blade from its body and readying for the next attack."),
         ],
         "result": "success", # successful advantage strike
@@ -310,7 +413,6 @@ combat_events = {
     },
 
     # --- Disadvantage Actions ---
-
     ("r", "c"): {
         "lines": [
             ("You do your best to avoid another blow, but the last has already taken its toll on your agility."),
