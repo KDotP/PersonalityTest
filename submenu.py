@@ -41,12 +41,22 @@ def Minigame(frog_name="Testing Frog"):
     slow_print("\nYou draw your sword and ready your stance. It's you or it.")
     pause(secs=1.5)
     # Begin first fight
-    Fight_One(frog_name)
+    combat_outcome = Combat(static=REFERENCE.UNICORN_STATIC, charging=REFERENCE.UNICORN_CHARGING, reeling=REFERENCE.UNICORN_REELING, player_health_max=PLAYER_START_HEALTH, enemy_health_max=6, enemy_name="Unicorn")
+    if combat_outcome == False: # I go back and forth with if !cond or if cond == False
+        slow_print("Your knees have grown weak. Your arms weaker.")
+        pause()
+        slow_print("You struggle to raise your sword. Now is your chance to fight back, but your energy is sapped. Your body is screaming for rest.")
+        pause()
+        slow_print("The unicorn charges one more time, but you know you lack the energy to fight back.")
+        slow_print("You raise your shield one more time, but it suddenly feels much heavier.")
+        pause(5) # SET TO 2 FOR REAL RUN
+        return False # Return to survey with failure. Dead ending?
+    slow_print("You wipe your blade clean of blood, though not before removing the unicorn's horn as a trophy for yourself.")
+    pause(5) # REMOVE FOR REAL RUN
 
-def Fight_One(frog_name):
-    Combat(static=REFERENCE.UNICORN_STATIC, charging=REFERENCE.UNICORN_CHARGING, reeling=REFERENCE.UNICORN_REELING, player_health_max=PLAYER_START_HEALTH, enemy_health_max=6, enemy_name="Unicorn")
+# -- Main Combat Function --
 
-def Combat(static="S", charging="C", reeling="R", player_health_max=10, enemy_health_max=6, enemy_name="Testing Monster"):
+def Combat(static="S", charging="C", reeling="R", player_health_max=10, enemy_health_max=6, enemy_name="Invalid Monster"):
     """
     Fight Design:
     Start in 'even footing'. 
@@ -56,9 +66,9 @@ def Combat(static="S", charging="C", reeling="R", player_health_max=10, enemy_he
     If either side wins, they deal 1 damage, then enter advantage state. Change sprite depending on advantage
     In advantage state, both sides again get 3 options, though they differ for attacking and defending.
     For the side with advantage ('charging'), they can Charge, Kite, or Heavy Attack
-    For the side in disadvantage ('reeling'), they can Retreat or Riposte
-    Charge beats retreat, dealing 2 extra damage, Kite only deals 1 extra damage, but can't be countered, and Heavy Attack beats Riposte, also dealing 2 extra damange.
-    In the event that the defender chooses the correct counter (retreat against heavy, riposte against charge), they take no additional damage.
+    For the side in disadvantage ('reeling'), they can Retreat or Dig In
+    Charge beats retreat, dealing 2 extra damage, Kite only deals 1 extra damage, but can't be countered, and Heavy Attack beats Dig In, also dealing 2 extra damange.
+    In the event that the defender chooses the correct counter (retreat against heavy, dig in against charge), they take no additional damage.
     In any case, both sides return to the even stance.
 
     Combat ends when either side runs out of health.
@@ -67,22 +77,68 @@ def Combat(static="S", charging="C", reeling="R", player_health_max=10, enemy_he
     # Also I know these look kinda like AI comments, but that's one thing AI got right
     enemy_health_current = enemy_health_max
     player_health_current = player_health_max
+    use_tutorial_clash = True
+    use_tutorial_advantage = True
+    use_tutorial_disadvantage = True
 
     # Repeat until one side runs out of health
     while True:
         print(static)
         player_action = Static_Menu(enemy_name, enemy_health_current, enemy_health_max, player_health_current, player_health_max)
-        enemy_action = Random_Static_Attack()
+        enemy_action = Random_Attack()
 
-        # TO DO: make dialog variable-based instead of hard coding!
-        run_combat_event(player_action, enemy_action)
+        # TO DO: make dialog variable-based dialog instead of hard coding
+        outcome = run_combat_event(player_action, enemy_action)
+
+        if outcome == "advantage":
+            enemy_health_current -= 1
+            if (enemy_health_current <= 0):
+                return True
+
+            print(reeling)
+            player_action = Advantage_Menu(enemy_name, enemy_health_current, enemy_health_max, player_health_current, player_health_max)
+
+            if player_action == "k": # Kite 1 damage, always successful
+                combat_print("You hold your momentum, scoring several more cuts and bruises before the chase is over and you're back to even footing.")
+                enemy_health_current -= 1
+                if (enemy_health_current <= 0):
+                    return True
+
+            else: # Non-kite, the beast counters
+                enemy_action = Random_Attack(outcome)
+
+                outcome = run_combat_event(player_action, enemy_action)
+                if outcome == "success":
+                    enemy_health_current -= 2
+                    if (enemy_health_current <= 0):
+                        return True
+
+        elif outcome == "disadvantage":
+            player_health_current -= 1
+            if (player_health_current <= 0):
+                return False
+            print(charging)
+            player_action = Disadvantage_Menu(enemy_name, enemy_health_current, enemy_health_max, player_health_current, player_health_max)
+            enemy_action = Random_Attack(outcome)
+
+            outcome = run_combat_event(player_action, enemy_action)
+            if outcome == "failure":
+                player_health_current -= 1 # Player advantage
+                if (player_health_current <= 0):
+                    return False
+
+        # Victory condition
+        if enemy_health_current <= 0:
+            return True
+        
+        if player_health_current <= 0:
+            return False
+
+# -- Action Menus --
 
 # Display health and options, return valid answer
 def Static_Menu(enemy_name, enemy_health_current, enemy_health_max, player_health_current, player_health_max, display_hint=False):
-    line_break()
-    print(f"        {enemy_name}             {hp_bar(enemy_health_current, enemy_health_max)}")
-    line_break()
-    print(f"        YOU                    {hp_bar(player_health_current, player_health_max)}")
+    Display_Stats(enemy_name, enemy_health_current, enemy_health_max, player_health_current, player_health_max)
     print("What will you do?")
     if display_hint:
         print("HINT: Only enter the letter shown before each action to take that one!")
@@ -96,16 +152,73 @@ def Static_Menu(enemy_name, enemy_health_current, enemy_health_max, player_healt
         slow_print("Invalid action!")
         pause(1)
         return Static_Menu(enemy_name, enemy_health_current, enemy_health_max, player_health_current, player_health_max, display_hint=True)
+    
+def Advantage_Menu(enemy_name, enemy_health_current, enemy_health_max, player_health_current, player_health_max, display_hint=False):
+    Display_Stats(enemy_name, enemy_health_current, enemy_health_max, player_health_current, player_health_max)
+    print("The enemy is reeling! Press the advantage!")
+    if display_hint:
+        print("HINT: Only enter the letter shown before each action to take that one!")
+    print("[C] Charge            [K] Kite          [H] Heavy Attack")
+    print()
+    action = input("> ").strip().lower()
+    if action == "c" or action == "k" or action == "h":
+        return action
+    else:
+        # Reprompt on invalid input with added hint
+        slow_print("Invalid action!")
+        pause(1)
+        return Advantage_Menu(enemy_name, enemy_health_current, enemy_health_max, player_health_current, player_health_max, display_hint=True)
+    
+def Disadvantage_Menu(enemy_name, enemy_health_current, enemy_health_max, player_health_current, player_health_max, display_hint=False):
+    Display_Stats(enemy_name, enemy_health_current, enemy_health_max, player_health_current, player_health_max)
+    print("You're on the backfoot! How will you defend yourself?")
+    if display_hint:
+        print("HINT: Only enter the letter shown before each action to take that one!")
+    print("[R] Retreat            [D] Dig In")
+    print()
+    action = input("> ").strip().lower()
+    if action == "r" or action == "d":
+        return action
+    else:
+        # Reprompt on invalid input with added hint
+        slow_print("Invalid action!")
+        pause(1)
+        return Disadvantage_Menu(enemy_name, enemy_health_current, enemy_health_max, player_health_current, player_health_max, display_hint=True)
+    
+# -- Combat Helpers --
 
-def Random_Static_Attack():
-    r = random.randint(1, 3)
-    # I could also return both as numbers, but I think it's more readable this way
-    if r == 1:
-        return "s"
-    if r == 2:
-        return "b"
-    if r == 3:
-        return "f"
+def Display_Stats(enemy_name, enemy_health_current, enemy_health_max, player_health_current, player_health_max):
+    line_break()
+    print(f"        {enemy_name}             {hp_bar(enemy_health_current, enemy_health_max)}")
+    line_break()
+    print(f"        YOU                    {hp_bar(player_health_current, player_health_max)}")
+
+# I could have just rolled a d3 or d2 to determine outcomes, but I think this is still worth it since this is more modular
+def Random_Attack(mode="static"):
+    # It occurs to me now I could have just passed in options, then randomly selected from the list
+    # At least you know this is human code
+    if mode == "static":
+        r = random.randint(1, 3)
+        # I could also return both as numbers, but I think it's more readable this way
+        if r == 1:
+            return "s"
+        if r == 2:
+            return "b"
+        if r == 3:
+            return "f"
+    elif mode == "advantage": # player advantage
+        r = random.randint(1, 2)
+        if r == 1:
+            return "r"
+        if r == 2:
+            return "d"
+    elif mode == "disadvantage": # player disadvantage
+        # No kite for monsters, additional boost for players
+        r = random.randint(1, 2)
+        if r == 1:
+            return "c"
+        if r == 2:
+            return "h"
 
 # Runs the dictionary and returns the outcome
 # Returns "clash", "advantage", or "disadvantage"
@@ -127,6 +240,8 @@ def run_combat_event(player_action, enemy_action):
 
     return event.get("result")
 
+# -- Utilities --
+
 def slow_print(text, delay=0.027, newline=True):
     for ch in text: # I keep forgetting you don't need parentheses in python
         print(ch, end='', flush=True) # Flush needs to be true or messes up
@@ -135,7 +250,7 @@ def slow_print(text, delay=0.027, newline=True):
         print()
 
 # Wrapper with fast default read, better for keeping tempo in combat
-def combat_print(text, delay=0.02, newline=True):
+def combat_print(text, delay=0.022, newline=True):
     slow_print(text, delay=delay, newline=newline)
 
 def pause(secs=1):

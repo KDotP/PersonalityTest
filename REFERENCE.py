@@ -270,4 +270,77 @@ combat_events = {
         ],
         "result": "disadvantage",
     },
+
+    # --- Advantage Actions ---
+
+    ("c", "r"): {
+        "lines": [
+            ("The beast retreats, but you're already moving, you blade high."),
+            ("You blade plunges into flesh, blood already flowing freely from the fresh wound."),
+            ("The beast can only retreat further, drawing the blade from its body and readying for the next attack."),
+        ],
+        "result": "success", # successful advantage strike
+    },
+
+    ("c", "d"): {
+        "lines": [
+            ("You dive your sword forward, but the beast has already dug in, fighting aside your blade."),
+            ("Before it can strike in revenge for its fresh wound, you've backed off, readying for the next oppertunity."),
+        ],
+        "result": "failure",
+    },
+
+    ("h", "r"): {
+        "lines": [
+            ("Your blade rises above your head, ready to plunge down onto its victim."),
+            ("Before you can take your prize, the creature backs off, clearing your blade's path."),
+            ("Frustrated, you lower your sword and return to a more neutral stance."),
+        ],
+        "result": "failure",
+    },
+
+    ("h", "d"): {
+        "lines": [
+            ("The beast readies itself, already defensive of its new wound."),
+            ("While it lowers to make a more steady defender, your blade is already towering above."),
+            ("With a single swift motion, you bring the blade down on the creature, shearing fleshing from body."),
+            ("It backs off, breathing heavily and readying for the next blow."),
+        ],
+        "result": "success",
+    },
+
+    # --- Disadvantage Actions ---
+
+    ("r", "c"): {
+        "lines": [
+            ("You do your best to avoid another blow, but the last has already taken its toll on your agility."),
+            ("Your skin ignite with pain as you add another wound to your body, barely managing to pull away enough to spare yourself any further punishment."),
+        ],
+        "result": "failure", # unsuccessful defensisve action
+    },
+
+    ("r", "h"): {
+        "lines": [
+            ("Adrenaline courses through your viens, driving your feet without conscious mind."),
+            ("You barely evade attack after attack until you're far enough to raise your own weapon."),
+        ],
+        "result": "success",
+    },
+
+    ("d", "c"): {
+        "lines": [
+            ("You lower your body, bringing yourself closer to the ground and steadying in preperation for the next strike."),
+            ("The beast is quickly on you again, but its charge stalls as your shield deflects several strikes until you spot an oppertunity to fight back."),
+        ],
+        "result": "success",
+    },
+
+    ("d", "h"): {
+        "lines": [
+            ("Your feet slip against the rough rock floors of the dungeon, costing you valuable attention and agility."),
+            ("Before you can restore your stance, another blow lands, the cold dungeon air meeting your bloodstream."),
+            ("You grimace in pain, but manage to recover your stance and ready for the next chance to get revenge."),
+        ],
+        "result": "failure",
+    },
 }
