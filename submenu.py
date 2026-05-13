@@ -1,12 +1,13 @@
 import time, random
-import REFERENCE
+import REFERENCE, submenu_addendum
 
 LINE_BREAK = "──────────────────────────────────────────────────────────"
 
 PLAYER_START_HEALTH = 10
-PLAYER_HEALTH_GROWTH = 3
+PLAYER_HEALTH_GROWTH = 5
 UNICORN_START_HEALTH = 6
-GRYPHON_START_HEALTH = 11
+GRYPHON_START_HEALTH = 13
+DRAGON_START_HEALTH = 23
 
 def Minigame(frog_name="Testing Frog"):
     slow_print("You enter the dungeon, the cold and dank air hitting your nose immediately.")
@@ -119,6 +120,46 @@ def Minigame(frog_name="Testing Frog"):
     combat_outcome = Combat(static=REFERENCE.GRYPHON_STATIC, charging=REFERENCE.GRYPHON_CHARGING, reeling=REFERENCE.GRYPHON_REELING, player_health_max=PLAYER_START_HEALTH+PLAYER_HEALTH_GROWTH, enemy_health_max=GRYPHON_START_HEALTH, enemy_name="Gryphon")
     if combat_outcome == False:
         print(f"        You             {hp_bar(0, PLAYER_START_HEALTH+PLAYER_HEALTH_GROWTH)}")
+        slow_print("Your number of wounds and bruises has grown too numerous. Your body struggles to keep up.")
+        pause()
+        slow_print("A shadow dashes through the darkness, evading the light.")
+        pause()
+        slow_print("You should get up, but you're so... ", newline=False)
+        pause()
+        slow_print("so tired.")
+        pause(2)
+        return False
+    
+    print(f"        Gryphon             {hp_bar(0, GRYPHON_START_HEALTH)}")
+    pause()
+    slow_print("Your final blow strikes true and the beast grows still.")
+    pause()
+    slow_print("You grab a handful of feathers for your apparent collection of rare creature trophies, but have no choice but to leave the carcass where it stands.")
+    slow_print("Your mind wanders to what may happen to the body after you're gone with no scavengers to clean up the mess, but a distant creaking reminds you that you have little time to contemplate such things.")
+    pause(2)
+
+    print(REFERENCE.CORRIDOR_STRAIGHT)
+    slow_print("There is only one way forward. No branching paths, no cubbies in the wall, no objects of interest. Just one endless passageway.")
+    pause()
+    slow_print("You bandage yourself as you walk, unwilling to stop anywhere without cover. Despite your injuries, you feel stronger.")
+    slow_print("The air here has begun to grow warmer, the walls less pockmarked.")
+    slow_print("It feels almost as if the dungeon itself is alive.")
+    pause(3)
+    slow_print("Ahead, the walls give way to a wide cavern. A slight gust bellows from the opening, warm and moist like an ocean breeze.")
+    slow_print("At the entrance, the walls and ceiling are too far away to be illuminated by your torch's light. You can only see the floor and the distant shine of something glimmering in hte faint reaches of the light.")
+    pause()
+    slow_print("The closer you get, the more you can see. The glimmers! ", newline=False)
+    pause(0.5)
+    slow_print("Each disparate shine is unmistakable now: Frog Coins!")
+    slow_print("You've found the dungeon's treasure!")
+    pause(2)
+    slow_print("Before you have time to celebrate, you hear the telltale roar of the dungeon's guardian.")
+    slow_print("One hand finds the grip of your sword, the other your shield.")
+    pause()
+    slow_print("This will be a true test of your skills.")
+    pause(3)
+
+    combat_outcome = submenu_addendum.Dragon_Combat(static=REFERENCE.DRAGON_STATIC, charging=REFERENCE.DRAGON_CHARGING, reeling=REFERENCE.DRAGON_REELING, player_health_max=(PLAYER_START_HEALTH + (PLAYER_HEALTH_GROWTH * 2)), enemy_health_max=DRAGON_START_HEALTH, enemy_name="Dragon, Guardian of the Dungeon")
 
 # -- Main Combat Function --
 
@@ -233,7 +274,7 @@ def Combat(static="S", charging="C", reeling="R", player_health_max=10, enemy_he
         
         if player_health_current <= 0:
             return False
-
+        
 # -- Action Menus --
 
 # Display health and options, return valid answer

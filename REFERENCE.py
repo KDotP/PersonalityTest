@@ -446,3 +446,155 @@ combat_events = {
         "result": "failure",
     },
 }
+
+# ------ Dragon combat events, uses different dialog ------
+
+dragon_dragon_events = {
+    # --- Clashes ---
+    ("s", "s"): {
+        "lines": [
+            ("You thrust you sword forward, finding nothing but air as the dragon rises above you, its claws already trained on you."),
+            ("Sparks fly from your sword as the steel scrapes against its talons, barely managing to fight them off as you get ready to strike again."),
+        ],
+        "result": "clash",
+    },
+
+    ("b", "b"): {
+        "lines": [
+            ("You ready your shield, ready to block another billow of flame."),
+            ("The two of you circle each other, navigating the piles of coins without glancing away from each other, but neither of you dare to strike."),
+        ],
+        "result": "clash",
+    },
+
+    ("f", "f"): {
+        "lines": [
+            ("You fake a swipe at the dragon, but it deflects your sword with a claw before you can adjust your swing."),
+            ("The creature glares down at you in what could almost be interpreted as mockery, but it does nothing to follow up."),
+        ],
+        "result": "clash",
+    },
+
+    # --- Player Advantage ---
+    ("s", "f"): {
+        "lines": [
+            ("The dragon slams its head forward, teeth snapping at you, but you narrowly evade."),
+            ("Your sword thrusts forward, finding a tender-looking section of its jaw and digging as far into as your blade can reach."),
+            ("The monster screetches, recoiling back, hot smoke billowing from its nostrils."),
+        ],
+        "result": "advantage",
+    },
+
+    ("b", "s"): {
+        "lines": [
+            ("You pull your shield up just in time to block the stream of flames being spewed from the dragon's mouth."),
+            ("When the flames subside, you rush foward, closing the distance and stabbing into the dragon."),
+        ],
+        "result": "advantage",
+    },
+
+    ("f", "b"): {
+        "lines": [
+            ("You fake a bash from your shield, the dragon swatting it away."),
+            ("However, the true attack lies behind, your sword already swinging forward."),
+        ],
+        "pause": 1,
+        "result": "advantage",
+    },
+
+    # --- Player Disadvantage --- CHANGE ALL BELOW THIS
+    ("s", "b"): {
+        "lines": [
+            ("Your entire body shifts as you put your full weight into your attack."),
+            ("With so much momentum already invested, you can only watch helplessly as the beast blocks your blow, taking advantage of your poor stance to counter-attack."),
+        ],
+        "result": "disadvantage",
+    },
+
+    ("b", "f"): {
+        "lines": [
+            ("The beast steps back as it readies a strong swing, prompting you to raise your shield."),
+            ("You stand there for a second, but when no attack slams against your shield, you peek your head over, only to see the true attack, now too late to stop."),
+        ],
+        "result": "disadvantage",
+    },
+
+    ("f", "s"): {
+        "lines": [
+            ("You swing your sword lazily, preparing to redirect the attack to avoid the beast's block, but the beast has no such intention."),
+            ("Your blade freezes as you feel its strike connect, only recovering fast enough to figure out how to escape worse consequences."),
+        ],
+        "result": "disadvantage",
+    },
+
+    # --- Advantage Actions ---
+    ("c", "r"): {
+        "lines": [
+            ("The beast retreats, but you're already moving, your blade high."),
+            ("Your blade plunges into flesh, blood already flowing freely from the fresh wound."),
+            ("The beast can only retreat further, drawing the blade from its body and readying for the next attack."),
+        ],
+        "result": "success", # successful advantage strike
+    },
+
+    ("c", "d"): {
+        "lines": [
+            ("You dive your sword forward, but the beast has already dug in, fighting aside your blade."),
+            ("Before it can strike in revenge for its fresh wound, you've backed off, readying for the next oppertunity."),
+        ],
+        "result": "failure",
+    },
+
+    ("h", "r"): {
+        "lines": [
+            ("Your blade rises above your head, ready to plunge down onto its victim."),
+            ("Before you can take your prize, the creature backs off, clearing your blade's path."),
+            ("Frustrated, you lower your sword and return to a more neutral stance."),
+        ],
+        "result": "failure",
+    },
+
+    ("h", "d"): {
+        "lines": [
+            ("The beast readies itself, already defensive of its new wound."),
+            ("While it lowers to make a more steady defender, your blade is already towering above."),
+            ("With a single swift motion, you bring the blade down on the creature, shearing fleshing from body."),
+            ("It backs off, breathing heavily and readying for the next blow."),
+        ],
+        "result": "success",
+    },
+
+    # --- Disadvantage Actions ---
+    ("r", "c"): {
+        "lines": [
+            ("You do your best to avoid another blow, but the last has already taken its toll on your agility."),
+            ("Your skin ignite with pain as you add another wound to your body, barely managing to pull away enough to spare yourself any further punishment."),
+        ],
+        "result": "failure", # unsuccessful defensisve action
+    },
+
+    ("r", "h"): {
+        "lines": [
+            ("Adrenaline courses through your viens, driving your feet without conscious mind."),
+            ("You barely evade attack after attack until you're far enough to raise your own weapon."),
+        ],
+        "result": "success",
+    },
+
+    ("d", "c"): {
+        "lines": [
+            ("You lower your body, bringing yourself closer to the ground and steadying in preperation for the next strike."),
+            ("The beast is quickly on you again, but its charge stalls as your shield deflects several strikes until you spot an oppertunity to fight back."),
+        ],
+        "result": "success",
+    },
+
+    ("d", "h"): {
+        "lines": [
+            ("Your feet slip against the rough rock floors of the dungeon, costing you valuable attention and agility."),
+            ("Before you can restore your stance, another blow lands, the cold dungeon air meeting your bloodstream."),
+            ("You grimace in pain, but manage to recover your stance and ready for the next chance to get revenge."),
+        ],
+        "result": "failure",
+    },
+}
