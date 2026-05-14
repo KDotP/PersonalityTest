@@ -2,6 +2,8 @@
 # This is done to reduce file size and make editing easier
 # Credits for each ASCII art image is above the variable (except for the dictionary at the end)
 
+LINE_BREAK = "──────────────────────────────────────────────────────────"
+
 # Sourced via https://www.asciiart.eu/art/23319246a6009130, author Tim Spicer (Darkstar), modified
 CORRIDOR_SPLIT = r"""
  _____________________________________________
@@ -449,7 +451,7 @@ combat_events = {
 
 # ------ Dragon combat events, uses different dialog ------
 
-dragon_dragon_events = {
+dragon_combat_events = {
     # --- Clashes ---
     ("s", "s"): {
         "lines": [
@@ -502,27 +504,27 @@ dragon_dragon_events = {
         "result": "advantage",
     },
 
-    # --- Player Disadvantage --- CHANGE ALL BELOW THIS
+    # --- Player Disadvantage ---
     ("s", "b"): {
         "lines": [
-            ("Your entire body shifts as you put your full weight into your attack."),
-            ("With so much momentum already invested, you can only watch helplessly as the beast blocks your blow, taking advantage of your poor stance to counter-attack."),
+            ("You lunge forward with all your strength, your sword aimed straight for the dragon's chest."),
+            ("Before the strike can land, one of its massive claws bats your blade aside, leaving your balance broken and your guard open for its counter-attack."),
         ],
         "result": "disadvantage",
     },
 
     ("b", "f"): {
         "lines": [
-            ("The beast steps back as it readies a strong swing, prompting you to raise your shield."),
-            ("You stand there for a second, but when no attack slams against your shield, you peek your head over, only to see the true attack, now too late to stop."),
+            ("The dragon pulls back, smoke curling from its nostrils as you raise your shield to meet another burst of flame."),
+            ("You wait for the fire to come, but instead its tail lashes around your guard, striking before you can react."),
         ],
         "result": "disadvantage",
     },
 
     ("f", "s"): {
         "lines": [
-            ("You swing your sword lazily, preparing to redirect the attack to avoid the beast's block, but the beast has no such intention."),
-            ("Your blade freezes as you feel its strike connect, only recovering fast enough to figure out how to escape worse consequences."),
+            ("You feint with your sword, expecting the dragon to shift into a defensive stance."),
+            ("Instead, it surges forward without hesitation, its claws crashing into you before you can recover your footing."),
         ],
         "result": "disadvantage",
     },
@@ -530,36 +532,36 @@ dragon_dragon_events = {
     # --- Advantage Actions ---
     ("c", "r"): {
         "lines": [
-            ("The beast retreats, but you're already moving, your blade high."),
-            ("Your blade plunges into flesh, blood already flowing freely from the fresh wound."),
-            ("The beast can only retreat further, drawing the blade from its body and readying for the next attack."),
+            ("The dragon pulls back across its hoard, but you press forward without hesitation."),
+            ("Your blade drives between its scales, drawing a fresh stream of blood onto the gold beneath your feet."),
+            ("With an enraged roar, the dragon tears itself free and retreats, smoke spilling from its jaws as it prepares to strike again."),
         ],
         "result": "success", # successful advantage strike
     },
 
     ("c", "d"): {
         "lines": [
-            ("You dive your sword forward, but the beast has already dug in, fighting aside your blade."),
-            ("Before it can strike in revenge for its fresh wound, you've backed off, readying for the next oppertunity."),
+            ("You thrust your sword toward the dragon's wounded side, but it braces itself behind folded wings and hardened scales."),
+            ("Your strike glances away harmlessly, and you quickly retreat before its claws can punish your mistake."),
         ],
         "result": "failure",
     },
 
     ("h", "r"): {
         "lines": [
-            ("Your blade rises above your head, ready to plunge down onto its victim."),
-            ("Before you can take your prize, the creature backs off, clearing your blade's path."),
-            ("Frustrated, you lower your sword and return to a more neutral stance."),
+            ("You raise your blade high, ready to bring it down on the dragon's exposed flesh."),
+            ("But the creature recoils just in time, its great body sliding back across the treasure-strewn floor."),
+            ("You lower your sword with frustration, forced to wait for another opening."),
         ],
         "result": "failure",
     },
 
     ("h", "d"): {
         "lines": [
-            ("The beast readies itself, already defensive of its new wound."),
-            ("While it lowers to make a more steady defender, your blade is already towering above."),
-            ("With a single swift motion, you bring the blade down on the creature, shearing fleshing from body."),
-            ("It backs off, breathing heavily and readying for the next blow."),
+            ("The dragon lowers itself, protecting its fresh wound as it prepares to endure your next strike."),
+            ("But your sword is already descending, aimed with all the strength you can muster."),
+            ("Steel bites through scale and flesh alike, tearing a cry of pain from the beast."),
+            ("The dragon stumbles back, breathing heavily as it readies itself for the next exchange."),
         ],
         "result": "success",
     },
@@ -567,33 +569,33 @@ dragon_dragon_events = {
     # --- Disadvantage Actions ---
     ("r", "c"): {
         "lines": [
-            ("You do your best to avoid another blow, but the last has already taken its toll on your agility."),
-            ("Your skin ignite with pain as you add another wound to your body, barely managing to pull away enough to spare yourself any further punishment."),
+            ("You scramble backward, but your last wound slows your every movement."),
+            ("The dragon surges after you, claws and flame leaving fresh pain behind before you barely escape its reach."),
         ],
-        "result": "failure", # unsuccessful defensisve action
+        "result": "failure", # unsuccessful defensive action
     },
 
     ("r", "h"): {
         "lines": [
-            ("Adrenaline courses through your viens, driving your feet without conscious mind."),
-            ("You barely evade attack after attack until you're far enough to raise your own weapon."),
+            ("Adrenaline drives your legs as you flee across the dragon's glittering hoard."),
+            ("You narrowly evade snapping jaws and slashing claws until enough distance opens for you to raise your weapon once more."),
         ],
         "result": "success",
     },
 
     ("d", "c"): {
         "lines": [
-            ("You lower your body, bringing yourself closer to the ground and steadying in preperation for the next strike."),
-            ("The beast is quickly on you again, but its charge stalls as your shield deflects several strikes until you spot an oppertunity to fight back."),
+            ("You steady your footing among the scattered coins, lowering your shield as the dragon charges."),
+            ("Its assault crashes against your guard, and through the force of claws and flame, you find a brief opening to fight back."),
         ],
         "result": "success",
     },
 
     ("d", "h"): {
         "lines": [
-            ("Your feet slip against the rough rock floors of the dungeon, costing you valuable attention and agility."),
-            ("Before you can restore your stance, another blow lands, the cold dungeon air meeting your bloodstream."),
-            ("You grimace in pain, but manage to recover your stance and ready for the next chance to get revenge."),
+            ("Your footing slips across the loose treasure beneath you, costing you precious balance."),
+            ("Before you can recover, the dragon's strike tears into you, its fury cutting deeper than steel."),
+            ("You grit your teeth through the pain and force yourself back into a fighting stance."),
         ],
         "result": "failure",
     },

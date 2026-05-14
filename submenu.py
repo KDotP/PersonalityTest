@@ -1,8 +1,6 @@
 import time, random
 import REFERENCE, submenu_addendum
 
-LINE_BREAK = "──────────────────────────────────────────────────────────"
-
 PLAYER_START_HEALTH = 10
 PLAYER_HEALTH_GROWTH = 5
 UNICORN_START_HEALTH = 6
@@ -403,7 +401,7 @@ def pause(secs=1):
 
 # Makes things look a little cleaner
 def line_break():
-    print(LINE_BREAK)
+    print(REFERENCE.LINE_BREAK)
 
 def hp_bar(current, maximum):
     bar = '['
