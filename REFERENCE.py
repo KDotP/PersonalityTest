@@ -498,7 +498,7 @@ dragon_combat_events = {
     ("f", "b"): {
         "lines": [
             ("You fake a bash from your shield, the dragon swatting it away."),
-            ("However, the true attack lies behind, your sword already swinging forward."),
+            ("However, the true attack lies behind, your sword already stabbing into flesh."),
         ],
         "pause": 1,
         "result": "advantage",
