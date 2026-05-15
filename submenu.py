@@ -8,6 +8,11 @@ GRYPHON_START_HEALTH = 13
 DRAGON_START_HEALTH = 23
 
 def Minigame(frog_name="Testing Frog"):
+    if frog_name == "Testing Frog":
+        ans = input("Enter to 'Y' to jump straight to final battle, or enter to play full game.\n> ").strip().lower()
+        if ans == 'y':
+            submenu_addendum.Dragon_Combat(static=REFERENCE.DRAGON_STATIC, charging=REFERENCE.DRAGON_CHARGING, reeling=REFERENCE.DRAGON_REELING, player_health_max=(PLAYER_START_HEALTH + (PLAYER_HEALTH_GROWTH * 2)), enemy_health_max=DRAGON_START_HEALTH, enemy_name="Dragon, Guardian of the Dungeon")
+
     slow_print("You enter the dungeon, the cold and dank air hitting your nose immediately.")
     slow_print("The walls are decrepit and detritus crumbles from them when touched.")
     slow_print("You hear distant sounds of crackling. Fire, falling stone, or something more sinister.")

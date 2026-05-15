@@ -28,7 +28,7 @@ import REFERENCE
     Player-Specific Momentum Actions:
     Shield Bash (Clash, 1 clash cooldown): Reduce momentum by 1 for both sides, resets to a new clash
     Hold Ground (Advantage, no cooldown): Gain 1 momentum, but deal no damage
-    Overextend (Clash, 2 clash cooldown): Gain up 2 unclaimed momentum, always lose clash and take 1 extra damage
+    Overextend (Clash, 2 clash cooldown): Gain up 2 unclaimed momentum, immediately lose clash
     Go For the Heart (Clash, at 5 momentum): Deal 4 unblockable damage and lose 2 momentum
 
     Dragon-Specific Momentum Actions:
@@ -62,10 +62,10 @@ def Dragon_Combat(static="S", charging="C", reeling="R", player_health_max=10, e
     MOMENTUM_TOTAL = 5
 
     # Cooldown maximums
-    SHIELD_BASH_CD_MAX = 2
-    OVEREXTEND_CD_MAX = 2
+    SHIELD_BASH_CD_MAX = 3
+    OVEREXTEND_CD_MAX = 3 # pushing for a slightly less 'special-attack-oriented' combat style
     WING_BUFFET_CD_MAX = 3 # longer cooldown due to strength
-    HEADBUTT_CD_MAX = 2
+    HEADBUTT_CD_MAX = 3
     GLARE_CD_MAX = 2
     TAKE_FLIGHT_CD_MAX = 2
  
@@ -155,6 +155,7 @@ def Dragon_Combat(static="S", charging="C", reeling="R", player_health_max=10, e
         print(f"        YOU                    {hp_bar(player_health_current, player_health_max)}")
         line_break()
         print(f"        MOMENTUM               {momentum_bar()}")
+        print(f"        {REFERENCE.MOMENTUM_DESC.get(player_momentum)}")
         line_break()
  
     def tick_cooldowns():
@@ -170,12 +171,12 @@ def Dragon_Combat(static="S", charging="C", reeling="R", player_health_max=10, e
  
     def dragon_choose_special(phase):
         if phase == "advantage":
-            if take_flight_cd == 0 and dragon_momentum >= 3 and random.random() < 0.55:
+            if take_flight_cd == 0 and dragon_momentum >= 3 and random.random() < 0.75: # Fly really often!
                 return "take_flight"
-            if wing_buffet_cd == 0 and random.random() < (0.30 + (unclaimed() * 0.05)): # Slightly more likely to use depending on # of unclaimed
+            if wing_buffet_cd == 0 and random.random() < (0.30 + (unclaimed() * 0.08) + (player_momentum * 0.04)): # Slightly more likely to use depending on # of unclaimed or existing player momentum
                 return "wing_buffet"
         elif phase == "disadvantage": # Push back advantage
-            if headbutt_cd == 0 and dragon_momentum <= 2 and random.random() < (0.20 + (player_momentum * 0.085)): # Increase chance of using as player gains more momentum
+            if headbutt_cd == 0 and dragon_momentum <= 2 and random.random() < (0.25 + (player_momentum * 0.055) and player_action != "e"): # Increase chance of using as player gains more momentum, do not immediately cancel overextend
                 return "headbutt"
         elif phase == "clash":
             if glare_cd == 0 and unclaimed() > 0 and random.random() < (0.25 + (unclaimed() * 0.10)): # more likely to glare for each unclaimed momentum (min of 0.35)
@@ -198,13 +199,13 @@ def Dragon_Combat(static="S", charging="C", reeling="R", player_health_max=10, e
         print("[S] Slash            [B] Block         [F] Feint")
         valid = {"s", "b", "f"}
         if shield_bash_cd == 0 and player_momentum > 0:
-            print("[X] Shield Bash      (both sides lose 1 momentum, return to clash, prevents overextend)")
+            print("[X] Shield Bash      (both sides lose 1 momentum, does not invoke disadvantage)")
             valid.add("x")
         if overextend_cd == 0 and unclaimed() > 0:
-            print(f"[E] Overextend       (claim up to 2 unclaimed momentum [{unclaimed()} available], always lose clash + 1 dmg)")
+            print(f"[E] Overextend       (claim up to 2 unclaimed momentum [{unclaimed()} available], but take a hit)")
             valid.add("e")
         if player_momentum == 5:
-            print("[G] Go For the Heart (4 unblockable damage, lose 2 momentum)")
+            print("[G] Go For the Heart (5 unblockable damage, lose 2 momentum)")
             valid.add("g")
         print()
         return prompt(valid)
@@ -326,7 +327,7 @@ def Dragon_Combat(static="S", charging="C", reeling="R", player_health_max=10, e
             combat_print("You pour every scrap of momentum into one desperate, crushing blow — straight for the heart!")
             pause(0.5)
             combat_print("The dragon has no answer. The strike punches through scale and bone.")
-            enemy_health_current -= 4
+            enemy_health_current -= 5
             player_release(2)
             tick_cooldowns()
             if enemy_health_current <= 0:
@@ -350,7 +351,6 @@ def Dragon_Combat(static="S", charging="C", reeling="R", player_health_max=10, e
             combat_print("You're helpless to block as the dragon attacks!")
             pause(1.5)
             player_momentum += gain
-            player_health_current -= 1 # Take one more damage due to disadvantage state
             overextend_cd = OVEREXTEND_CD_MAX
             tick_cooldowns()
             # Dragon wins automatically, enter player disadvantage
@@ -397,7 +397,7 @@ def Dragon_Combat(static="S", charging="C", reeling="R", player_health_max=10, e
             player_action = advantage_menu()
  
             if player_action == "l":   # Hold Ground — gain 1
-                combat_print("You hold your position, letting the dragon reset while you bank the momentum.")
+                combat_print("You hold your position, letting the dragon recover while you reconsider your strategy.")
                 player_gain(1)
                 pause(1.5)
                 continue
@@ -469,10 +469,11 @@ def Dragon_Combat(static="S", charging="C", reeling="R", player_health_max=10, e
             dragon_special = dragon_choose_special("disadvantage")
             if dragon_special == "headbutt" and headbutt_cd == 0:
                 combat_print("The dragon swings its great head in a punishing headbutt, throwing you across the room!")
+                combat_print("As you recover from the throw, you're unable to overextend!")
                 player_release(2)
                 headbutt_cd = HEADBUTT_CD_MAX
-                # Block instant reclaim for 1 turn
-                shield_bash_cd += 1
+                # Block instant reclaim for 2 turns
+                overextend_cd = max(overextend_cd, 2) # if cooldown is currently higher, do not reduce
                 pause(1.5)
                 continue
  
@@ -535,4 +536,3 @@ def hp_bar(current, maximum):
 def main():
     Dragon_Combat(static=REFERENCE.DRAGON_STATIC, charging=REFERENCE.DRAGON_CHARGING, reeling=REFERENCE.DRAGON_REELING, player_health_max=20, enemy_health_max=22, enemy_name="Dragon, Guardian of the Dungeon")
 
-main()

@@ -600,3 +600,12 @@ dragon_combat_events = {
         "result": "failure",
     },
 }
+
+MOMENTUM_DESC = {
+    0: "You are being overrun, taking 1 damage per turn!",
+    1: "You're at a disadvantage, your advantage attacks deal 1 less damage when successful.",
+    2: "Your sword stands ready.",
+    3: "You're beginning to find your footing, unsuccessful advantage attacks still deal 1 damage.",
+    4: "Your advantage is growing! Matched attacks deal 1 damage, but do not put you in advantage.",
+    5: "You're dominating the fight! Matched attacks now put you into advantage!",
+}
