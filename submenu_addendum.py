@@ -35,7 +35,7 @@ import REFERENCE
     Wing Buffet (Advantage, 2 clash cooldown): Gain 1 unclaimed momentum, steal 1 momentum
     Headbutt (Disadvantage, 2 clash cooldown, while down momentum): Player loses 2 momentum, block player abilities for 1 turn
     Glare (Clash, 2 clash cooldown, while unclaimed momentum): Gain 1 unclaimed momentum, deals no damage, but player action also fails (even cooldown actions)
-    Take Flight (Advantage, 2 clash cooldown, while up momentum, weighted favorably):  Requires 3+ momentum, reset momentum to 2, deal no damage, battle enters a temporary "Dragonflight" state for 2 turns
+    Take Flight (Disadvantage, 2 clash cooldown, while up momentum, weighted favorably):  Requires 3+ momentum, reset momentum to 2, deal no damage, battle enters a temporary "Dragonflight" state for 2 turns
     * Dragonflight stages do not recover cooldown
     * Player can select from several new choices
     ** Take Breath: Gain 1 unclaimed momentum
@@ -171,12 +171,12 @@ def Dragon_Combat(static="S", charging="C", reeling="R", player_health_max=10, e
  
     def dragon_choose_special(phase):
         if phase == "advantage":
-            if take_flight_cd == 0 and dragon_momentum >= 3 and random.random() < 0.75: # Fly really often!
-                return "take_flight"
             if wing_buffet_cd == 0 and random.random() < (0.30 + (unclaimed() * 0.08) + (player_momentum * 0.04)): # Slightly more likely to use depending on # of unclaimed or existing player momentum
                 return "wing_buffet"
         elif phase == "disadvantage": # Push back advantage
-            if headbutt_cd == 0 and dragon_momentum <= 2 and random.random() < (0.25 + (player_momentum * 0.055) and player_action != "e"): # Increase chance of using as player gains more momentum, do not immediately cancel overextend
+            if take_flight_cd == 0 and dragon_momentum >= 3 and random.random() < 0.55: # Lowered chance due to fix
+                return "take_flight"
+            if headbutt_cd == 0 and dragon_momentum <= 2 and random.random() < (0.25 + (player_momentum * 0.05)): # Increase chance of using as player gains more momentum, overextend places a 1 turn cooldown
                 return "headbutt"
         elif phase == "clash":
             if glare_cd == 0 and unclaimed() > 0 and random.random() < (0.25 + (unclaimed() * 0.10)): # more likely to glare for each unclaimed momentum (min of 0.35)
@@ -241,6 +241,7 @@ def Dragon_Combat(static="S", charging="C", reeling="R", player_health_max=10, e
         high_ground = False
  
         for turn in range(1, 3):
+            print(REFERENCE.DRAGON_AIRBORNE)
             display_stats()
 
             if turn == 1:
@@ -250,7 +251,8 @@ def Dragon_Combat(static="S", charging="C", reeling="R", player_health_max=10, e
             current_dive = max(0, dive_damage - (2 if high_ground else 0))
             combat_print(f"You're taking 1 damage per turn from fire! The final dive in {3 - turn} turn(s) will do {current_dive} damage!")
             print()
-            print("[B] Take Breath      — Gain 1 Momentum")
+            if unclaimed() > 0:
+                print("[B] Take Breath      — Gain 1 Unclaimed Momentum")
             print("[C] Take Cover       — Take no fire damage this turn")
             if not run_used:
                 print("[R] Run              — Dragon loses 1 Momentum, but only works once")
@@ -258,7 +260,9 @@ def Dragon_Combat(static="S", charging="C", reeling="R", player_health_max=10, e
             print("[T] Taunt            — Gain 1 Momentum, resolve dive immediately")
             print()
  
-            valid = {"b", "c", "h", "t"}
+            valid = {"c", "h", "t"}
+            if unclaimed() > 0:
+                valid.add("b")
             if not run_used:
                 valid.add("r")
             action = prompt(valid)
@@ -266,7 +270,7 @@ def Dragon_Combat(static="S", charging="C", reeling="R", player_health_max=10, e
             take_fire = True
             if action == "b":
                 combat_print("You steady your breathing despite the heat, finding a sliver of composure.")
-                player_gain(1)
+                player_momentum += min(1, unclaimed())
             elif action == "c":
                 combat_print("You throw yourself behind a heap of coins, the flames washing harmlessly overhead.")
                 take_fire = False
@@ -330,6 +334,7 @@ def Dragon_Combat(static="S", charging="C", reeling="R", player_health_max=10, e
             enemy_health_current -= 5
             player_release(2)
             tick_cooldowns()
+            pause(1.5)
             if enemy_health_current <= 0:
                 return True
             continue
@@ -351,6 +356,7 @@ def Dragon_Combat(static="S", charging="C", reeling="R", player_health_max=10, e
             combat_print("You're helpless to block as the dragon attacks!")
             pause(1.5)
             player_momentum += gain
+            headbutt_cd = max(headbutt_cd, 1) # place headbutt on 1 turn cooldown so overextend isn't immediately canceled out
             overextend_cd = OVEREXTEND_CD_MAX
             tick_cooldowns()
             # Dragon wins automatically, enter player disadvantage

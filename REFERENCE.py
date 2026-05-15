@@ -167,6 +167,19 @@ DRAGON_CHARGING = r"""
                                '.__)
 """
 
+# Sourced via https://www.asciiart.eu/art/8b0e61f1b343f4e2, author Unknown
+DRAGON_AIRBORNE = r"""
+       \`----.__                 ____               
+        |       `--._         <=/  , *--,           
+        /_             `-.    ,/  / `````            
+          \__             (_.'  ,'                   
+             \__ ......'       \___----^__           
+          _./               ,'           `.         
+|\     _.'   ___/ )\...._"   ___           \        
+| \__.'  __.'            `""'   `""`.'""``--\       
+\____.-'      
+"""
+
 # Sourced via https://www.asciiart.eu/art/0af5287cc6a700df, author BluePard
 GRYPHON_STATIC = r"""
                  /i
