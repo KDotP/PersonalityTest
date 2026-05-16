@@ -1,4 +1,5 @@
-import random, socket, os, sys, subprocess
+import random, socket
+from collections import Counter
 import mematics # Cool visualizer
 import submenu # Dungeon
 
@@ -424,6 +425,53 @@ def main():
         ])
 
     empath = Choice("Do you view other people's happiness as your responsibilty?", "I would sacrifice my own happiness to make someone else happy", "I will do what I can to make other people happy, but not at a cost to myself", "I will do what I can to make people happy, but I won't go out of my way to do so", "I've got too many things to worry about with my own happiness, nonetheless someone else's", target=1)
+    hubris += Choice("Do you think you could survive time traveling back in time?", "I'd probably die from some extinct disease", "I don't think anyone would believe I'm a time travler", "Most people back then were peasents, I don't think I'd be special", "I think I could survive for a while", "I'd be running the place", target=5)
+    if frog_location == "adventuring shop 2":
+        ans = Choice(f"Looks like {frog_name} is back from the adventuring shop (again)! He has the adventuring gear he wanted! \nUnfortuntely, {frog_name} knows that frogs have some difficulty adventuring. Will you go for him?", "I will take up the challenge!", "Sell the gear for a profit", "Hold on to it for yourself")
+        if ans == 0: # accept the call
+            outcome = submenu.Minigame(frog_name)
+            if outcome:
+                Display_Ending("ADVN - Dungeon Crawler", [
+                    "You rose to the challenge. You fought the dragon. You won. You freed some people, probably.",
+                    "No evil creature was able to overwhelm you, the champion of the dungeon.",
+                    f"A wealth of frog coins followed you around, ensuring you can buy a home for {frog_name}.",
+                    "You can't exactly do much with the coins yourself though.",
+                    " ",
+                    "This is a very difficult challenge! To celebrate, add \"Sir.\" before your discord name to commemorate your victory!",
+                    "Again, well done! If you have any feedback about the dungeon crawler, please send a message to the developer.",
+                    "Positive or negative can both be constructive, but I'm pretty happy with how it turned out.",
+                    "If you want to see the logic of the fight, I recommend checking out the source code on Github (submenu, submenu_addendum, and REFERENCE). It's pretty interesting.",
+                    " ",
+                    "Bye now!"
+                ])
+            else:
+                Display_Ending("DEAD - Yeah, You're Pretty Dead", [
+                    "Since the only thing that returns from the dungeon crawler function is whether or not you won, I don't know what killed you.",
+                    "I bet it was the dragon. Statistically, it's a safe bet.",
+                    "If you want another shot, there are no shortcuts! Except for the one the after you start the adventure.",
+                    "Remember to manage your momentum more carefully next time!",
+                    "Again, if you made it to the dragon.",
+                    "I guess you're probably not going to try again though.",
+                    "Being dead and all, that is."
+                ])
+        elif ans == 1: # sell the gear
+            sale = Choice(f"Selling the gear earned fiften whole frog bucks! \n{frog_name} offers them to you.", f"Thank you, {frog_name}", "Keep them for yourself", target=1) # do not override ans
+            if sale == 1:
+                frog_bucks += 15 # 10 profit
+        elif ans == 2: # hold on to
+            frog_name += " (adventurer)"
 
+    if Counter(frog_name) > 55: # collected basically every title
+        Display_Ending("CLCT - Title-Obsessed", [
+            "You've always felt like you were born in the wrong era.",
+            "Many people say the same, but they usually mean that life has gotten too complicated. No you, though.",
+            "When you say you were born in the wrong era, you mean that you were always meant to be a noble, fighting your siblings for worthless titles.",
+            "A county? A city? A town? Nothing would too small to draw your ire.",
+            "Your commander would complain behind your back, your population would be in shambles, but think of how much worthless land you could own!",
+            "At least today, you can still go into medicine and get a dozen suffixes, but it's not the same, is it?"
+        ])
+
+    Choice(f"{frog_name} is tired now and is heading to bed. Say good night to {frog_name}!", f"Good night, {frog_name}!", "Good night!")
+    
 
 main()

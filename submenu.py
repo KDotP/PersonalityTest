@@ -1,17 +1,59 @@
 import time, random
 import REFERENCE, submenu_addendum
 
+DRAGON_NAME = "Dragon, Keeper of the Hoard"
+
 PLAYER_START_HEALTH = 10
 PLAYER_HEALTH_GROWTH = 5
 UNICORN_START_HEALTH = 6
 GRYPHON_START_HEALTH = 13
-DRAGON_START_HEALTH = 23
+DRAGON_START_HEALTH = 22
 
 def Minigame(frog_name="Testing Frog"):
     if frog_name == "Testing Frog":
         ans = input("Enter to 'Y' to jump straight to final battle, or enter to play full game.\n> ").strip().lower()
         if ans == 'y':
-            submenu_addendum.Dragon_Combat(static=REFERENCE.DRAGON_STATIC, charging=REFERENCE.DRAGON_CHARGING, reeling=REFERENCE.DRAGON_REELING, player_health_max=(PLAYER_START_HEALTH + (PLAYER_HEALTH_GROWTH * 2)), enemy_health_max=DRAGON_START_HEALTH, enemy_name="Dragon, Guardian of the Dungeon")
+            combat_outcome = submenu_addendum.Dragon_Combat(static=REFERENCE.DRAGON_STATIC, charging=REFERENCE.DRAGON_CHARGING, reeling=REFERENCE.DRAGON_REELING, player_health_max=(PLAYER_START_HEALTH + (PLAYER_HEALTH_GROWTH * 2)), enemy_health_max=DRAGON_START_HEALTH, enemy_name="Dragon, Guardian of the Dungeon")
+            if combat_outcome == False:
+                Dragon_Loss()
+                return False
+            Dragon_Win()
+            return True
+
+    def Dragon_Loss():
+        print(f"        You             {hp_bar(0, PLAYER_START_HEALTH+(PLAYER_HEALTH_GROWTH*2))}")
+        slow_print("You hear flapping above you, but find it difficult to return to your feet.")
+        pause()
+        slow_print("Your legs, your hands—they're coated in cuts and bruises.")
+        pause()
+        slow_print("You see the cavern light up and hear the sound of another spray of fire breath. You can already feel the warmth on your face, though you can no longer tell if that's the warmth of fire, or blood.")
+        pause()
+        slow_print("The world feels as if was traveling in slow motion as the area around you glows bright.")
+        slow_print("You're too tired, too weary to look up.")
+        pause(3)
+    
+    def Dragon_Win():
+        print(f"        {DRAGON_NAME}             {hp_bar(0, DRAGON_START_HEALTH)}")
+        slow_print("One more cut proves too great for the grand beast.")
+        slow_print("Its wings stretch wide on either side, but it only stands there.")
+        pause()
+        slow_print("It takes one more croaking breath before collapsing.")
+        slow_print("You stand there for a long while, waiting for it to spring its trap.")
+        pause(0.5)
+        slow_print("But it never does.")
+        pause()
+        slow_print("Once you're confident its safe, you pull a scale from its still body.")
+        slow_print("Your sword finds its spot in your sheath, your new keepsake in your pocket.")
+        pause()
+        slow_print("You gather up a greedy armful of coins, filling every spare pocket with coins.")
+        slow_print("With the three ingredients placed together, the portal back to the teseting realm opens up before you.")
+        pause()
+        slow_print("You push some frog coins through ahead of you, but you know the portal will not last forever.")
+        slow_print("You take one last look back at the dragon's body behind you, the new scratches on your body lighting up in vivid reminder.")
+        pause()
+        slow_print("You grin and step forward, leaving this place behind.")
+        pause(3)
+        line_break()
 
     slow_print("You enter the dungeon, the cold and dank air hitting your nose immediately.")
     slow_print("The walls are decrepit and detritus crumbles from them when touched.")
@@ -26,23 +68,36 @@ def Minigame(frog_name="Testing Frog"):
     # Doesn't actually matter, but might as well make players feel like it does
     while True:
         ans = input("Do you go (l)eft? Or (r)ight? ").strip().lower()
-        if ans == "l" or ans == "r":
+        if ans == "l" or ans == "r" or ans == "z":
             break
         print("\nInvalid input! Only enter the letter corresponding to an action, as indicated by the parentheses. E.g. for (r)ight, enter 'r'.")
-    
-    slow_print("You turn ", newline=False)
+
     if ans == "l":
-        slow_print("left, lit now only by your torch.")
-    else:
-        slow_print("right, lit now only by your torch.")
+        slow_print("You turn left, lit now only by your torch.")
+    elif ans == "r":
+        slow_print("You turn right, lit now only by your torch.")
+    elif ans == "z":
+        slow_print("You were lucky to plan ahead, knowing to take a map before such a dangerous journey.")
+        slow_print("You pause briefly to read over it, finding the optimal path that will keep you clear of any monsters.")
+        pause()
+        slow_print("Two monsters—a unicorn and a gryphon—interupt you on your way, but your preperation allows you to dispatch them easily.")
+        slow_print("Before long, you find yourself in a vast room, glittering with gold. A flapping sound above draws your attention. ", newline=False)
+        pause()
+        slow_print("The dragon!")
+        combat_outcome = submenu_addendum.Dragon_Combat(static=REFERENCE.DRAGON_STATIC, charging=REFERENCE.DRAGON_CHARGING, reeling=REFERENCE.DRAGON_REELING, player_health_max=(PLAYER_START_HEALTH + (PLAYER_HEALTH_GROWTH * 2)), enemy_health_max=DRAGON_START_HEALTH, enemy_name=DRAGON_NAME)
+        if combat_outcome == False:
+            Dragon_Loss()
+            return False
+        Dragon_Win()
+        return True
     pause()
     slow_print("As you press onward, a chalky mass flickers at the edge of your light.")
     slow_print("You extend your torch forward, bringing the flame closer, the light glints off a reflective, almost mesmerizing horn.")
     # Fancy formatting
     slow_print("You snap out of your trance ", newline=False)
-    slow_print("just in time", delay=0.005, newline=False)
+    slow_print("just in time!", delay=0.005, newline=False)
     pause()
-    slow_print(" barely dodging the unicorn's strike!")
+    slow_print(" Barely dodging the unicorn's strike!")
     pause()
     slow_print("\nYou draw your sword and ready your stance. It's you or it.")
     pause(secs=1.5)
@@ -162,7 +217,17 @@ def Minigame(frog_name="Testing Frog"):
     slow_print("This will be a true test of your skills.")
     pause(3)
 
-    combat_outcome = submenu_addendum.Dragon_Combat(static=REFERENCE.DRAGON_STATIC, charging=REFERENCE.DRAGON_CHARGING, reeling=REFERENCE.DRAGON_REELING, player_health_max=(PLAYER_START_HEALTH + (PLAYER_HEALTH_GROWTH * 2)), enemy_health_max=DRAGON_START_HEALTH, enemy_name="Dragon, Guardian of the Dungeon")
+    combat_outcome = submenu_addendum.Dragon_Combat(static=REFERENCE.DRAGON_STATIC, charging=REFERENCE.DRAGON_CHARGING, reeling=REFERENCE.DRAGON_REELING, player_health_max=(PLAYER_START_HEALTH + (PLAYER_HEALTH_GROWTH * 2)), enemy_health_max=DRAGON_START_HEALTH, enemy_name=DRAGON_NAME)
+    if combat_outcome == False:
+        Dragon_Loss()
+        line_break()
+        slow_print("Your loss has at least taught you something:")
+        slow_print("Entering 'z' at the first junction will lead you straight to the dragon!")
+        line_break()
+        pause(4)
+        return False
+    Dragon_Win()
+    return True
 
 # -- Main Combat Function --
 
@@ -421,5 +486,3 @@ def hp_bar(current, maximum):
 def main():
     print("─── You are currently in testing mode ───")
     Minigame()
-
-main()
