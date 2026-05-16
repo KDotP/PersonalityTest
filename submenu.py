@@ -10,16 +10,6 @@ GRYPHON_START_HEALTH = 13
 DRAGON_START_HEALTH = 22
 
 def Minigame(frog_name="Testing Frog"):
-    if frog_name == "Testing Frog":
-        ans = input("Enter to 'Y' to jump straight to final battle, or enter to play full game.\n> ").strip().lower()
-        if ans == 'y':
-            combat_outcome = submenu_addendum.Dragon_Combat(static=REFERENCE.DRAGON_STATIC, charging=REFERENCE.DRAGON_CHARGING, reeling=REFERENCE.DRAGON_REELING, player_health_max=(PLAYER_START_HEALTH + (PLAYER_HEALTH_GROWTH * 2)), enemy_health_max=DRAGON_START_HEALTH, enemy_name="Dragon, Guardian of the Dungeon")
-            if combat_outcome == False:
-                Dragon_Loss()
-                return False
-            Dragon_Win()
-            return True
-
     def Dragon_Loss():
         print(f"        You             {hp_bar(0, PLAYER_START_HEALTH+(PLAYER_HEALTH_GROWTH*2))}")
         slow_print("You hear flapping above you, but find it difficult to return to your feet.")
@@ -155,7 +145,7 @@ def Minigame(frog_name="Testing Frog"):
 
     elif ans == "s":
         slow_print("You head forward, pressing your ear to the door and listening. When no sound comes, you turn the knob and open the door.")
-        slow_print("Inside, the 'room', if it could so be called, is mostly baren. The walls are slightly more intact here, but the door seems mostly cosmetic since the path keeps going forward.")
+        slow_print("Inside, the 'room', if it could so be called, is mostly barren. The walls are slightly more intact here, but the door seems mostly cosmetic since the path keeps going forward.")
         slow_print("Something glints at the edge of your torch light, drawing your attention. ", newline=False)
         pause()
         slow_print("A chest!")
@@ -204,7 +194,7 @@ def Minigame(frog_name="Testing Frog"):
     slow_print("It feels almost as if the dungeon itself is alive.")
     pause(3)
     slow_print("Ahead, the walls give way to a wide cavern. A slight gust bellows from the opening, warm and moist like an ocean breeze.")
-    slow_print("At the entrance, the walls and ceiling are too far away to be illuminated by your torch's light. You can only see the floor and the distant shine of something glimmering in hte faint reaches of the light.")
+    slow_print("At the entrance, the walls and ceiling are too far away to be illuminated by your torch's light. You can only see the floor and the distant shine of something glimmering in the faint reaches of the light.")
     pause()
     slow_print("The closer you get, the more you can see. The glimmers! ", newline=False)
     pause(0.5)
@@ -486,3 +476,5 @@ def hp_bar(current, maximum):
 def main():
     print("─── You are currently in testing mode ───")
     Minigame()
+
+main()

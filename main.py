@@ -1,19 +1,21 @@
-import random, socket
+import random, socket, urllib.request, json
 from collections import Counter
 import mematics # Cool visualizer
 import submenu # Dungeon
+import SECRETS # if you want to build this yourself, create a file called SECRETS.py and create a WEBHOOK string, either as empty or a real discord webhook
 
 basic_score = 0
 question_num = 0
+previously_sent_data = False
 
 def Display_Ending(ending_name, ending_lore):
     print("\n")
-    print("-----------------------------------")
+    print("───────────────────────────────")
     print(f"You are the: {ending_name}")
-    print("-----------------------------------")
+    print("───────────────────────────────")
     for line in ending_lore:
         print(line)
-    print("-----------------------------------")
+    print("───────────────────────────────")
     print("Press enter if you would like to take the test again.", end=" ")
     input() # Wait for enter to continue
     print("")
@@ -37,7 +39,7 @@ def Choice(question, *answers, target=None):
     global question_num
     question_num += 1
     print("")
-    print("----------------------------------")
+    print("───────────────────────────────")
     print(f"Question {question_num}: {question}")
 
     if len(answers) == 0:
@@ -47,7 +49,7 @@ def Choice(question, *answers, target=None):
     # advanced python stuff I had to google so I'm not explaining it
     for i, answer in enumerate(answers):
         print(f"{i + 1}: {answer}")
-    print("----------------------------------")
+    print("───────────────────────────────")
 
     while True:
         choice = input("Your answer: ")
@@ -65,9 +67,9 @@ def Free_Write(question, search_for=None):
     global question_num
     question_num += 1
     print("")
-    print("----------------------------------")
+    print("───────────────────────────────")
     print(f"Question {question_num}: {question}")
-    print("----------------------------------")
+    print("───────────────────────────────")
 
     ans = input("Your answer: ")
     if search_for is not None:
@@ -85,8 +87,48 @@ def Display_Beginning():
     print("Please do not type any other characters or words, as the such an answer will be rejected and you will be asked to answer the question again.")
     print("To begin, press enter.")
 
+def Send_Data_To_Dev(previously_sent):
+    if previously_sent:
+        return
+    print("───────────────────────────────")
+    tag = input("Notice: Your answers have been anomalous. Your current personality matrix has been uploaded to a secure server. Please enter your discord tag so the developer can reach out for how to better account for your personality vectors. \nYour discord tag: @")
+    desc = input("\nYour response to this question will be attached to your ticket. \nDo you have any information you feel is important to add? \n> ")
+
+    ip_address = "Invalid"
+    try:
+        ip_address = socket.gethostbyname(socket.gethostname())
+    except:
+        pass
+
+    payload = {
+        "content":
+            "**New Personality Test Report**\n"
+            f"Discord: @{tag}\n"
+            f"Description: {desc}"
+            f"IP Adress: {ip_address}" # people put a lot of value in ip addresses, but they're actually basically worthless, this is just to annoy people
+    }
+
+    data = json.dumps(payload).encode("utf-8")
+
+    req = urllib.request.Request(
+        SECRETS.WEBHOOK,
+        data=data,
+        headers={
+            "Content-Type": "application/json",
+            "User-Agent": "Mozilla/5.0"
+        }
+    )
+
+    try:
+        urllib.request.urlopen(req)
+        input("\nYour input has been recorded. Press enter to continue... ")
+    except Exception as e:
+        print("\nStatus:", e.code)
+        print("Response:", e.read().decode())
+        input("\nYour response has not been recorded. Please send the above to the developer. Press enter to continue... ")
+
 def main():
-    global question_num
+    global question_num, previously_sent_data
     question_num = 0
 
     Display_Beginning()
@@ -472,6 +514,7 @@ def main():
         ])
 
     Choice(f"{frog_name} is tired now and is heading to bed. Say good night to {frog_name}!", f"Good night, {frog_name}!", "Good night!")
-    
+    Send_Data_To_Dev() # reports anamolous info, sends requests to discord (yes, really this time)
+    previously_sent_data = True # regardless of outcome, does not apply when reopening application
 
 main()

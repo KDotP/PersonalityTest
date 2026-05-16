@@ -65,7 +65,7 @@ def Dragon_Combat(static="S", charging="C", reeling="R", player_health_max=10, e
     SHIELD_BASH_CD_MAX = 3
     OVEREXTEND_CD_MAX = 3 # pushing for a slightly less 'special-attack-oriented' combat style
     WING_BUFFET_CD_MAX = 3 # longer cooldown due to strength
-    HEADBUTT_CD_MAX = 3
+    HEADBUTT_CD_MAX = 4 # annoying to play against
     GLARE_CD_MAX = 2
     TAKE_FLIGHT_CD_MAX = 2
  
@@ -174,9 +174,9 @@ def Dragon_Combat(static="S", charging="C", reeling="R", player_health_max=10, e
             if wing_buffet_cd == 0 and random.random() < (0.30 + (unclaimed() * 0.08) + (player_momentum * 0.04)): # Slightly more likely to use depending on # of unclaimed or existing player momentum
                 return "wing_buffet"
         elif phase == "disadvantage": # Push back advantage
-            if take_flight_cd == 0 and dragon_momentum >= 3 and random.random() < 0.55: # Lowered chance due to fix
+            if take_flight_cd == 0 and dragon_momentum >= 3 and random.random() < 0.55 + ((dragon_momentum - 3) * 0.1):
                 return "take_flight"
-            if headbutt_cd == 0 and dragon_momentum <= 2 and random.random() < (0.25 + (player_momentum * 0.05)): # Increase chance of using as player gains more momentum, overextend places a 1 turn cooldown
+            if headbutt_cd == 0 and dragon_momentum <= 2 and random.random() < (0.15 + (player_momentum * 0.05)): # Increase chance of using as player gains more momentum, overextend places a 1 turn cooldown
                 return "headbutt"
         elif phase == "clash":
             if glare_cd == 0 and unclaimed() > 0 and random.random() < (0.25 + (unclaimed() * 0.10)): # more likely to glare for each unclaimed momentum (min of 0.35)
