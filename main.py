@@ -102,9 +102,9 @@ def Send_Data_To_Dev(previously_sent):
 
     payload = {
         "content":
-            "**New Personality Test Report**\n"
+            "**New Personality Test Ticket**\n"
             f"Discord: @{tag}\n"
-            f"Description: {desc}"
+            f"Description: {desc}\n"
             f"IP Adress: {ip_address}" # people put a lot of value in ip addresses, but they're actually basically worthless, this is just to annoy people
     }
 
@@ -347,13 +347,13 @@ def main():
     feedback = Choice("Anonymous survey question: Do you feel that the answers posed thus far have been helpful in determining your personality? \nA free gift will be provided for your participation.", "Obviously", "Slightly", "Not really", target=3)
     if (feedback == 1):
         Choice("It seems we are uh... out of gifts. No particular reason. Sorry.", "Okay", "I feel like I would have gotten something if I had given good feedback.")
-    gift_num = Choice("Thank you for your candid feedback. Please choose a gift as our way of thanking you for your honest, unbiased feedback.", f"The title \"Mr.\" for your frog, {frog_name}", "+1.38 ak_mm score (leads to an interesting personality)", "A steam game code")
-    if (gift_num == 0):
-        frog_name = "Mr. " + frog_name
-    elif (gift_num == 2):
-        # Me when I tell the truth
-        # It's Dead Island from a November 2018 humble bundle.
-        Choice("Your game code is: KH5BR-TQJRN-LLEN9. Please note that all customers are given the same code. Would you like to pass it on to the next person?", "No, all for me!", "Pass it on!")
+    else:
+        gift_num = Choice("Thank you for your candid feedback. Please choose a gift as our way of thanking you for your honest, unbiased feedback.", f"The title \"Mr.\" for your frog, {frog_name}", "+1.38 ak_mm score (leads to an interesting personality)", "A steam game code")
+        if (gift_num == 0):
+            frog_name = "Mr. " + frog_name
+        elif (gift_num == 2):
+            # Me when I tell the truth
+            Choice("Your game code is: KH5BR-TQJRN-LLEN9. Please note that all customers are given the same code. Would you like to pass it on to the next person?", "No, all for me!", "Pass it on!")
     Choice("What's your favorite animal?", "Bunny", "Cat", "Dog")
     Choice("Which of the philosophical frameworks do you align with most closely?", "Utilitarianism", "Consequentialism", "Hedonism")
     pilo_num = random.random()
@@ -393,7 +393,7 @@ def main():
         frog_happiness -= 1
         # gives worthless frog bucks at the end, maybe reduces frog happiness?
 
-    Choice("You purchase an item from a vending machine, but it gets stuck. What do you do?", "Call or search for someone to help you", "Shake the machine in the hopes it drops the item", "Sigh and walk away")
+    aggression += Choice("You purchase an item from a vending machine, but it gets stuck. What do you do?", "Call or search for someone to help you", "Shake the machine in the hopes it drops the item", "Sigh and walk away", target=2)
     Choice("You're getting a little eepy. Do you take a nap?", "Yes, I want to feel well rested", "No, I have better things to do with my time", "No, I don't believe in naps")
     confidence += Choice("A friend invites you to a party. When you get there, you're informed your friend couldn't make. What do you do?", "No big deal, I'll go socialize with some strangers for a bit", "I'll talk to some of my friend's friends", "I'll find a pet to hang out with for a bit", "I'm just gonna go", target=1)
     
@@ -516,5 +516,35 @@ def main():
     Choice(f"{frog_name} is tired now and is heading to bed. Say good night to {frog_name}!", f"Good night, {frog_name}!", "Good night!")
     Send_Data_To_Dev() # reports anamolous info, sends requests to discord (yes, really this time)
     previously_sent_data = True # regardless of outcome, does not apply when reopening application
+    empath += Choice("You find someone crying on the sidewalk. You need to be somewhere important in a few minutes. What do you do?", "Leave some crying space for me!", "I have enough problems of my own", "Comfort them if you have enough time", "You'll get them feeling better, even if it means I'm late", target=4)
+    hubris += Choice("You're in an arena fight with a lion. You get to choose any primitive weapon of your choice. Who's winning?", "Any weapon? I got this", "I'll be a puddle of blood within a few minutes", target=1)
+    risk_taker = Choice("If a button had a 25% chance of giving you $10 million, a 25% chance of killing you, and a 50% chance of doing nothing, would you press it?", "Yes, of course", "No, that's stupid", "Double it and give it to the next person!", target=1)
+    
+    if aggression <= 1 and confidence <= 1 and empath <= 1:
+        Display_Ending("NXPC - Passive Observer", [
+            "There are lots of things someone is willing to die for, but even more things someone... isn't willing to die for.",
+            "For you, the list of things you'd die for is less about principle and more a list of things that will actually just kill you.",
+            "Everyone else already has opinions, so why would you need to add yours to the mix?",
+            "Even the Swiss have more opinions than you. Neutral is still a stance, after all. Do you even have any of those?",
+            "The good news is that all your fence sitting and question avoiding is will suited for a job in politics or management.",
+            "I'd be more kind about this, but I know you don't have an opinion on this assessment anyway."
+        ])
+
+    hubris += Choice("How long do you think you could survive on a desert island, assuming it has a source of food, fresh water, and shelter?", "Forever, if I had to", "Long enough to be rescued", "I'd die of boredom without instagram reels", "I'd probably get gored by a boar on the first day", target=1)
+    risk_taker += Choice("If you were given $100,000, but you could only use it for yourself after a year, how would you invest it in the meantime?", "I'd probably forget I had it honestly", "I'm buying options!", "Stocks and index funds", "Something boring like a savings account of bonds", target=2)
+    ans = Choice(f"{frog_name} says he had a nightmare. What do you do?", "Let me grab you a glass of warm milk and look for monsters under your bed", "Aww, tell me about your nightmare", "Why don't you stick with me for the next few questions", target=3)
+    if ans != 0:
+        empath += 1
+    
+    if risk_taker + hubris >= 5:
+        Display_Ending("RSKY - Soon-to-be-Dead", [
+            "You ski, you snowboard, you've broken a bone. None of that has stopped you.",
+            "You know what, I'm glad you're out there, taking up all the risks so the rest of us don't have to.",
+            "Where we be without our mountain climbers? Without those who wrestle bears?",
+            "Probably exactly where we are now, but it'd certainly be less interesting.",
+            "I recommend a good life insurance company. It won't make you rich, but at least your family and/or friends will be."
+        ])
+
+    
 
 main()

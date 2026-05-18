@@ -476,5 +476,3 @@ def hp_bar(current, maximum):
 def main():
     print("─── You are currently in testing mode ───")
     Minigame()
-
-main()
