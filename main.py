@@ -1,5 +1,4 @@
 import random, socket, urllib.request, json
-from collections import Counter
 import mematics # Cool visualizer
 import submenu # Dungeon
 import SECRETS # if you want to build this yourself, create a file called SECRETS.py and create a WEBHOOK string, either as empty or a real discord webhook
@@ -67,7 +66,7 @@ def Free_Write(question, search_for=None):
 
     ans = input("Your answer: ")
     if search_for is not None:
-        ans = Free_Write(question).lower()
+        ans = ans.lower()
         if (ans.find(search_for) > -1):
             return 1
         else:
@@ -84,6 +83,10 @@ def Display_Beginning():
 def Send_Data_To_Dev(previously_sent):
     if previously_sent:
         return
+    # Missing secrets
+    if not hasattr(SECRETS, "WEBHOOK"):
+        return
+
     print("───────────────────────────────")
     tag = input("Notice: Your answers have been anomalous. Your current personality matrix has been uploaded to a secure server. Please enter your discord tag so the developer can reach out for how to better account for your personality vectors. \nYour discord tag: @")
     desc = input("\nYour response to this question will be attached to your ticket. \nDo you have any information you feel is important to add? \n> ")
@@ -145,8 +148,8 @@ def main():
     indecision = Choice("Do you consider yourself an introvert or an extrovert?", "I am an introvert", "I don't know!", "I am an extrovert", target=2)
     aggression = Choice("How do you handle conflict?", "I confront it head on and try to resolve it", "I thrive in conflicts", "I avoid it at all costs", target=2)
     indecision += Choice("Do you feel more like yourself in the morning or night?", "Morning", "I don't know", "Night", target=2)
-    clinginess = Choice("How often do you persontify inanimate objects?", "Never", "Only if I use them often", "Every object in my room has a name")
-    confidence = Choice("Do you trust automatic door?", "With my life", "I've never had a bad interaction with one", "My hatred towards machines isn't reserved just for AI")
+    clinginess = Choice("How often do you personify inanimate objects?", "Never", "Only if I use them often", "Every object in my room has a name")
+    confidence = Choice("Do you trust automatic doors?", "With my life", "I've never had a bad interaction with one", "My hatred towards machines isn't reserved just for AI")
     aggression += Choice("Are you aware of your own breathing right now?", "Hmm?", "I'm a little annoyed", "I am now, damn you!")
     Choice("Which of the following sounds like the most enjoyable weekend?", "Going out with friends", "Staying in and watching movies", "Going on an adventure")
     indecision += Choice("Do you have a favorite side of the bed?", "Right", "I could never pick a favorite", "Left", target=2)
@@ -188,7 +191,7 @@ def main():
             "Fun fact: after every question, there is a 1 in 1000 chance that you will be given this ending.",
             "Sorry, but being unlucky is just part of who you are. Embrace it, and maybe one day you'll get lucky!",
             "Not likely though.",
-            "Sorry."
+            "Sorry.",
             "You will have to take the test again if you want to see your real ending, but hey, at least you got to see this one!"
         ])
 
@@ -207,11 +210,11 @@ def main():
         Display_Ending("AKWD - Awkward Test Taker", [
             "Look.",
             "Maybe we got off on the wrong foot. Maybe you were forced to take this test against your will. But at least I'm out here trying.",
-            "You're giving me nothing here. What, you thought that answering \"...\" at every available oppertunity was going to get you some special ending?",
+            "You're giving me nothing here. What, you thought that answering \"...\" at every available oppertonity was going to get you some special ending?",
             "Congrats, you got it! Now we're both just sitting here, a little uncomfortable, not sure what to say. I hope you're happy with yourself."
         ])
     procrastinator = Choice("You are given a difficult task you must complete within a month, how do you approach it?", "Get it done as fast as possible", "Get a bit done one day at a time", "Get everything done in the last week", target=3)
-    aggression += Choice("Somebow steals your lunch from the office fridge, how do you react?", "I poision the food so when they steal it again, they get their just reward", "I get really mad but don't say anything", "I just let it go, it's not worth the conflict", target=1)
+    aggression += Choice("Someone steals your lunch from the office fridge, how do you react?", "I poison the food so when they steal it again, they get their just reward", "I get really mad but don't say anything", "I just let it go, it's not worth the conflict", target=1)
     clinginess += Choice("How do you feel if someone takes a while to get back to you after you message them?", "Message them until they get back to me", "I'm a little annoyed, but I understand that people can be busy", "Once the message has been sent, I no longer care", target=1)
     aggression += Choice("Someone is being rude to you for no reason, how do you respond?", "I confront them and demand an explanation", "I get really mad but don't say anything", "I just let it go, it's not worth the conflict", target=1)
     liar += Choice("If a dog spoke to you in perfect English, who would you tell?", "The authorities", "My closest confidant", "No one, I would pretend it didn't happen to seem sane", target=3)
@@ -240,8 +243,10 @@ def main():
     liar += Choice("How many ducks do you think you take in a fight assuming they all attack at the same time and you can't bring anything with you?", "I'd die against even one.", "Probably one or two. Maybe three if I can find a sharp twig.", "Unlimited ducks. I scale.", target=3)
     confidence += Choice("How often do you reflect on previous decisions?", "All the time. Gotta get the stats for my next run of life", "Sometimes, mostly unforseen circumstances so I'll be more prepared in the future", "Never. Why dwell on previous decisions when I always make the correct ones?")
     compliant = Free_Write("I totally forgot to ask before, do you consent to your data being sold to advertisers, AI companies, and the U.S. government? \nDue to pesky EU regulations, this cannot be a multiple choice question. \nPlease answer \"I consent\". Please.", search_for="i consent")
-    if (compliant == 0):
-        Choice("Consent not detected. Your request will be respected in 2-4 business days.", "Ok", "No, wait, please sell my data!")
+    if compliant == 0:
+        compliant = Free_Write("Approval was not detected. Are you sure you don't want to consent? \nTo enable tracking, type \"I consent\".", search_for="i consent")
+        if compliant == 0:
+            Choice("Consent not detected. Your request will be respected in 2-4 business days.", "Ok", "No, wait, please sell my data!")
     t = Choice("Do you live in California?", "Yes", "I'll tell you later", "Thankfully no")
     if (t == 1):
         procrastinator += 1
@@ -352,16 +357,16 @@ def main():
     Choice("Which of the philosophical frameworks do you align with most closely?", "Utilitarianism", "Consequentialism", "Hedonism")
     pilo_num = random.random()
     pilo_sub = "Errorism"
-    if (pilo_num < 0.25):
+    if pilo_num < 0.25:
         pilo_sub = "Nihilism"
-    elif (pilo_sub < 0.5):
+    elif pilo_num < 0.5:
         pilo_sub = "Innatism"
-    elif (pilo_sub < 0.75):
+    elif pilo_num < 0.75:
         pilo_sub = "Pyrrhonism"
     else:
         # Thank you wikipedia
         pilo_sub = "Xenofeminism"
-    
+
     Choice(f"{frog_name} has brought you a different philosopical framework which it feels is more closely aligned to you: {pilo_sub}. \nWould you like to replace your answer with the one {frog_name} provided?", "Yes", "No")
     perfectionist += Choice("Do you believe something can be perfect?", "Can and should be", "It's relative", "Nothing can ever be perfect", target=1)
     edgy += Choice("How much money would \"enough\" for you?", "I'd work for free if I didn't have any expenses", "I expect fair compensation for my work", "I want to be wealthier than the average person", "I want to be rich, even if it comes at the cost of others", "I want to be richer than god and I'm willing to be the next Elon Musk to do it", target=5)
@@ -395,7 +400,7 @@ def main():
 
     if ((confidence + edgy) >= 5): # Max value of either is 3 thus far
         Display_Ending("VILN - Confidently Evil", [
-            "Since you were a child, you always saw the world for what it was: an oppertunity.",
+            "Since you were a child, you always saw the world for what it was: an opportunity.",
             "You take the last slice of pizza, but don't throw away the box. Every small slight is added to your book of grudges.",
             "Normally, some judgement is justified for the evil types, but with such confidence, it's hard to fault you.",
             "Just, please, for all of us, don't buy any islands. We've seen how that ends.",
@@ -450,7 +455,7 @@ def main():
         Choice(f"Something went wrong with {frog_name}'s return. Please report this to the developer since something was probably incorrectly configured.", "Ok, I will")
 
     perfectionist += Choice("How quickly do you adjust to new challenging situations?", "Quickly, I waste no time and hit the ground running", "Slowly, I want to step back and take everything in before I jump in", "Passively, I step in immediately and slowly soak everything in", target=2)
-    hubris = Choice("When you come up with a solution for a problem, how do you impliment it?", "Press send and on to the next thing, I trust that I got it right the first time", "Press send, then monitor until I can trust everything went right", "Check and recheck a dozen times before sending, then monitoring until I'm confident it worked", target=1)
+    hubris = Choice("When you come up with a solution for a problem, how do you implement it?", "Press send and on to the next thing, I trust that I got it right the first time", "Press send, then monitor until I can trust everything went right", "Check and recheck a dozen times before sending, then monitoring until I'm confident it worked", target=1)
     clinginess += Choice("How much time do you like to spend with friends?", "As much as possible, there are few minutes in the day where I'm not at least chatting in someone's dms", "I try to spend some time with friends at least once per day", "I'm content with spending time with friends once or a few times per week", "I let everyone else set my tempo", target=1)
 
     if ((clinginess + perfectionist) >= 5): # total max of each is 3
@@ -470,7 +475,7 @@ def main():
         ])
 
     empath = Choice("Do you view other people's happiness as your responsibilty?", "I would sacrifice my own happiness to make someone else happy", "I will do what I can to make other people happy, but not at a cost to myself", "I will do what I can to make people happy, but I won't go out of my way to do so", "I've got too many things to worry about with my own happiness, nonetheless someone else's", target=1)
-    hubris += Choice("Do you think you could survive time traveling back in time?", "I'd probably die from some extinct disease", "I don't think anyone would believe I'm a time travler", "Most people back then were peasents, I don't think I'd be special", "I think I could survive for a while", "I'd be running the place", target=5)
+    hubris += Choice("Do you think you could survive time traveling back in time?", "I'd probably die from some extinct disease", "I don't think anyone would believe I'm a time traveler", "Most people back then were peasants, I don't think I'd be special", "I think I could survive for a while", "I'd be running the place", target=5)
     if frog_location == "adventuring shop 2":
         ans = Choice(f"Looks like {frog_name} is back from the adventuring shop (again)! He has the adventuring gear he wanted! \nUnfortuntely, {frog_name} knows that frogs have some difficulty adventuring. Will you go for him?", "I will take up the challenge!", "Sell the gear for a profit", "Hold on to it for yourself")
         if ans == 0: # accept the call
@@ -506,7 +511,7 @@ def main():
         elif ans == 2: # hold on to
             frog_name += " (adventurer)"
 
-    if Counter(frog_name) > 55: # collected basically every title
+    if len(frog_name) > 55: # collected basically every title
         Display_Ending("CLCT - Title-Obsessed", [
             "You've always felt like you were born in the wrong era.",
             "Many people say the same, but they usually mean that life has gotten too complicated. No you, though.",
@@ -517,7 +522,7 @@ def main():
         ])
 
     Choice(f"{frog_name} is tired now and is heading to bed. Say good night to {frog_name}!", f"Good night, {frog_name}!", "Good night!")
-    Send_Data_To_Dev() # reports anamolous info, sends requests to discord (yes, really this time)
+    Send_Data_To_Dev(previously_sent_data) # reports anamolous info, sends requests to discord (yes, really this time)
     previously_sent_data = True # regardless of outcome, does not apply when reopening application
     empath += Choice("You find someone crying on the sidewalk. You need to be somewhere important in a few minutes. What do you do?", "Leave some crying space for me!", "I have enough problems of my own", "Comfort them if you have enough time", "You'll get them feeling better, even if it means I'm late", target=4)
     hubris += Choice("You're in an arena fight with a lion. You get to choose any primitive weapon of your choice. Who's winning?", "Any weapon? I got this", "I'll be a puddle of blood within a few minutes", target=1)
