@@ -4,7 +4,6 @@ import mematics # Cool visualizer
 import submenu # Dungeon
 import SECRETS # if you want to build this yourself, create a file called SECRETS.py and create a WEBHOOK string, either as empty or a real discord webhook
 
-basic_score = 0
 question_num = 0
 previously_sent_data = False
 
@@ -21,16 +20,6 @@ def Display_Ending(ending_name, ending_lore):
     print("")
     main() # Loop back to start, leaving previous loops in memeory (bad)
 
-def Indecision_Check(indecision_score):
-    if indecision_score >= 5:
-        Display_Ending("BOR - Boring", [
-            "Look.",
-            "You have agreed to take this test, and you have agreed to answer honestly.",
-            "I'm just an ultra-intelligent AI with knowledge twice that of all of humanity combined, but you're giving me nothing.",
-            "I give you two good options, you choose neither.",
-            "Have some confidence in yourself, and maybe one day you'll have an interesting personality to match."
-        ])
-
 # Unified question/answer function.
 # Pass any number of answer strings after the question.
 # target (optional): if provided, returns 1 when the user picks that answer number, otherwise 0.
@@ -38,6 +27,11 @@ def Indecision_Check(indecision_score):
 def Choice(question, *answers, target=None):
     global question_num
     question_num += 1
+
+    # Convert passed list to tuple
+    if len(answers) == 1 and isinstance(answers[0], (list, tuple)):
+        answers = tuple(answers[0])
+
     print("")
     print("───────────────────────────────")
     print(f"Question {question_num}: {question}")
@@ -146,7 +140,7 @@ def main():
     Choice("How do you handle stressful situations?", "I thrive under pressure", "I don't get in to stressful situations", "I get overwhelmed easily")
     Choice("Do you prefer to plan things out or be spontaneous?", "I like to plan everything out", "Things just happen to me so I adapt", "I prefer to be spontaneous")
     # First example of a targeted question, only return 1 if the user selects "..."
-    awkward_score = Choice("How do you feel about long silences in conversations?", "I would rather stare into the other person's eyes than speak", "...", "I get very uncomfortable and try to fill the silence", target=2)
+    awkward = Choice("How do you feel about long silences in conversations?", "I would rather stare into the other person's eyes than speak", "...", "I get very uncomfortable and try to fill the silence", target=2)
     Choice("What motivates you?", "I want to be the best at what I do", "I want to be successful and make a good living", "I want to be happy and enjoy life")
     indecision = Choice("Do you consider yourself an introvert or an extrovert?", "I am an introvert", "I don't know!", "I am an extrovert", target=2)
     aggression = Choice("How do you handle conflict?", "I confront it head on and try to resolve it", "I thrive in conflicts", "I avoid it at all costs", target=2)
@@ -158,7 +152,7 @@ def main():
     indecision += Choice("Do you have a favorite side of the bed?", "Right", "I could never pick a favorite", "Left", target=2)
     Choice("How many people do you think could recognize your footprints?", "I doubt anyone has it memorized", "Maybe a handful of people, but I don't know anyone specifically", "I know at least one person specifically who could recognize them")
     indecision += Choice("Which do you value more: stability or excitement?", "Stability, definitely", "I don't know", "Excitement for sure", target=2)
-    awkward_score += Choice("Are you alone right now?", "I'm in a call with other people if that's what you're asking", "Pretty sure", "...", target=3)
+    awkward += Choice("Are you alone right now?", "I'm in a call with other people if that's what you're asking", "Pretty sure", "...", target=3)
     Choice("How often do you try new things?", "I like to try new things all the time", "I try new things when I have the opportunity", "I prefer to stick to what I know")
 
     # Murder suspect arc
@@ -208,8 +202,8 @@ def main():
         Choice("Did something pop up on your screen just now?", "No, everything's fine", "I think so?", "Yes, I got a virus")
 
     liar += Choice("How long do you think you could pretend to be someone else in casual conversation?", "I could keep it up for hours", "I could try, but my heart wouldn't be in it", "I have no interest in impersonating someone else", target=1)
-    awkward_score += Choice("How often do you think you blink compared to the average person?", "Probably a bit less", "...", "Probably a bit more", target=2)
-    if (awkward_score >= 3):
+    awkward += Choice("How often do you think you blink compared to the average person?", "Probably a bit less", "...", "Probably a bit more", target=2)
+    if (awkward >= 3):
         Display_Ending("AKWD - Awkward Test Taker", [
             "Look.",
             "Maybe we got off on the wrong foot. Maybe you were forced to take this test against your will. But at least I'm out here trying.",
@@ -417,6 +411,15 @@ def main():
 
     indecision += Choice("Is Pluto a planet?", "Is and always was", "It's too difficult to choose an answer definitively", "Unless Europa is a planet, Pluto isn't either", "I blindly trust the globeheads at NASA to come up with my opinions for me", target=2)
 
+    if indecision >= 5:
+        Display_Ending("BOR - Boring", [
+            "Look.",
+            "You have agreed to take this test, and you have agreed to answer honestly.",
+            "I'm just an ultra-intelligent AI with knowledge twice that of all of humanity combined, but you're giving me nothing.",
+            "I give you two good options, you choose neither.",
+            "Have some confidence in yourself, and maybe one day you'll have an interesting personality to match."
+        ])
+
     # frog be back
     frog_bucks = 0
     if (frog_location == "adventuring shop 1"):
@@ -545,6 +548,78 @@ def main():
             "I recommend a good life insurance company. It won't make you rich, but at least your family and/or friends will be."
         ])
 
+    # This counts as this section's "bit"
+    religion_list = ["Christianity", "Islam", "Hinduism", "Buddhism", "Judaism", "Sikhism", "Baháʼí Faith", "Jainism", "Shinto", "Taoism", "Confucianism", "Zoroastrianism", "Animism", "Traditional African Religions", "Chinese Folk Religion", "Korean Shamanism", "Cao Dai", "Tenrikyo", "Spiritism", "Unitarian Universalism", "Paganism", "Wicca", "Rastafari", "Scientology", "Falun Gong", "Native American Religions", "Australian Aboriginal Religions", "Vodou", "Santería", "Druze", "Yazidism", "Mandaeism", "Ayyavazhi", "Karaite Judaism", "Samaritanism", "Neo-Druidism", "Neo-Paganism", "Shamanism", "Deism", "Pantheism", "Agnosticism", "Atheism", "Humanism"]
+    ans = Choice("Please choose the spiritual belief that most closely aligns with your belief system.", religion_list)
+    selected_religion = religion_list[ans]
+    religion_list.remove(selected_religion)
+    ans = Choice("Please choose the spiritual belief which is furthest seperated from your personal belief system.", religion_list)
+    anti_religion = religion_list[ans]
+    # My favorite stupid question out there https://www.reddit.com/r/AskReddit/comments/17qlr9y/atheists_imagine_youre_going_skydiving_with_a/
+    Choice(f"Imagine you're skydiving with a {anti_religion} baby. Suddenly, the baby tells you he won't open his parachute until you convert to {anti_religion}. \nWould you convert?", "Yes", "No")
+
+    clinginess += Choice("If you are not a man, imagine you are for one this question. \nHow often do you reminisce about that one time a stranger complimented you years ago?", "Before I go to sleep every night", "When I'm feeling down", "Sometimes when I'm randomly reminded", "Rarely", "I get compliments all the time! (this does not happen)", target=1)
+    risk_taker += Choice("A wizard offers you one of three glowing rocks. You do not have long to decide. What would you do?", "I will play it safe, take none", "Try to learn as much about each one before choosing", "I will take the most interesting-looking one!", target=3)
+    confidence += Choice("If you were sent back in time, do you think that you could convince medieval peasants that you are a wizard?", "With my skills? It'd be easy", "With the proper technology and knowledge, it'd be pretty doable", "I'd probably end up being burned as a witch", target=1)
     
+    # Another bit, though more subtle, helps break up the persistent tempo
+    bunch_of_rocks = ["Quartz", "Gold-Painted Rock", "Cursed Rock", "Pebble", "Volcanic Rock", "Uranium", "Obsidian", "Chalk", "Marble", "Granulite", "Whiteschist", "Flint", "Pyrite", "Magic Rock", "10kg of Steel"]
+    ans = Choice("If you convinced a bunch of medieval peasants you were a wizard and you had to give one a choice of one of three rocks, what's the first rock you would offer?", bunch_of_rocks)
+    selected_rocks = bunch_of_rocks[ans]
+    bunch_of_rocks.remove(bunch_of_rocks[ans])
+    ans = Choice("If you convinced a bunch of medieval peasants you were a wizard and you had to give one a choice of one of three rocks, what's the second rock you would offer?", bunch_of_rocks)
+    selected_rocks += bunch_of_rocks[ans]
+    bunch_of_rocks.remove(bunch_of_rocks[ans])
+    ans = Choice("If you convinced a bunch of medieval peasants you were a wizard and you had to give one a choice of one of three rocks, what's the third rock you would offer?", bunch_of_rocks)
+    selected_rocks += bunch_of_rocks[ans]
+    bunch_of_rocks.remove(bunch_of_rocks[ans])
+
+    perfectionist += Choice("If one pixel on your monitor isn't working, what would you do?", "If the monitor has a high enough resolution, I probably wouldn't even notice", "Into the trash you go! I'm getting a new monitor", "I can probably try to fix it myself", "Monitor? I'm taking this on a stone tablet", target=2)
+    judgy = 0 # Can be negative, flushing this out real quick
+    ans = Choice("You see someone doing something that's recommended against in the instructions. How do you respond?", "Walk over and point out the better way to do it", "I wouldn't confront them, but I'm definetly going to judge from a distance", "Why should I care?")
+    if ans == 1:
+        judgy += 1
+    elif ans == 2:
+        judgy -= 1
+    ans = Choice("You're at work and notice a coworker breaking a safety or sanitary proceedure. What do you do?", "Either confront the rule-breaker or report it depending on circumstance. Safety is no joke", "Do something about it if it's repeated, we all make mistakes", "Laws were made to be broken")
+    if ans == 0:
+        judgy += 1 # not unwarranted
+        risk_taker -= 1
+    elif ans == 1:
+        judgy -= 1 # I'm judging you though
+    ans = Choice("You see someone practicing a hobby you think is weird (carrying a plushy in public, furry, reading smut openly with no children around). How would you react?", "I struggle to see why I would care", "I'm going to go talk to them about their hobby", "I'm keeping my distance")
+    if ans == 1:
+        judgy -= 1
+    elif ans == 2:
+        judgy += 1
+
+    if judgy >= 3:
+        if selected_religion != "Atheist":
+            Display_Ending("SPRT - Judgy Theist", [
+                "If you've ever worked in food service, you've always feared one, but never saw yourself as one.",
+                f"Maybe it's not your fault. As a believer in {selected_religion}, judginess comes easily.",
+                "Politicians love you. Retail workers hate you. It's okay though, you hate them back.",
+                f"You likely spend your weekends shouting at non-believers to convert or face... whatever concequences {selected_religion} threatens.",
+                "I don't know, I'm a personality test AI, it's not exactly my field of expertise.",
+                "You'll probably find a job in the clergy, then resign when it turns out you're not practicing what you preach or something."
+            ])
+        else:
+            Display_Ending("RDDT - Reddit Atheist", [
+                "The world is chaos, but through your moderation powers, you may bring justice.",
+                "Those who post memes outside of Meme Monday fear you, as they should.",
+                "Your name is widely known for your moderating abilities (or that scandal you got into that changed the Reddit TOS).",
+                "A job would only slow you down, so you don't. Afterall, moderating is its own work.",
+                "It's a good thing you're paid in Reddit gold!"
+            ])
+    if judgy < 0:
+        if risk_taker >= 1: # I don't need to justify myself to you, imaginary reader
+            Display_Ending("OUTC - Social Explorer", [
+                "There is no information too insignifigant to escape your interest.",
+                "'Weirdness' is a term by those who lack the curosity to ask questions, and a term so often applied to you.",
+                "You have no issue associating with the outcasts or the weirdest of society. They make for the most interesting conversations, after all.",
+                "Emails line your inbox with all the random people you have email threads—sorry? Oh, yes, correspondences with.",
+                "You'll probably be offered a job which you've never heard of before by someone you haven't talked to in a decade and it will pay enough to sustain you for the rest of your life."
+            ])
+
 
 main()
