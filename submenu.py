@@ -9,7 +9,7 @@ UNICORN_START_HEALTH = 6
 GRYPHON_START_HEALTH = 13
 DRAGON_START_HEALTH = 22
 
-def Minigame(frog_name="Testing Frog"):
+def Minigame():
     def Dragon_Loss():
         print(f"        You             {hp_bar(0, PLAYER_START_HEALTH+(PLAYER_HEALTH_GROWTH*2))}")
         slow_print("You hear flapping above you, but find it difficult to return to your feet.")

@@ -1,12 +1,19 @@
 import random, urllib.request, json
 import mematics # Cool visualizer
 import submenu # Dungeon
-import SECRETS # if you want to build this yourself, create a file called SECRETS.py and create a WEBHOOK string, either as empty or a real discord webhook
+import SECRETS # if you want to build this yourself, create a file called SECRETS.py and create a WEBHOOK string, either as empty or a real discord webhook (also GAME_KEY)
 
 question_num = 0
 previously_sent_data = False
+ip_address = 0
+
+def First_Start():
+    global ip_address
+    ip_address = get_public_ip()
+    main()
 
 def Display_Ending(ending_name, ending_lore):
+    Send_Ending_To_Dev(ending_name)
     print("\n")
     print("───────────────────────────────")
     print(f"You are the: {ending_name}")
@@ -56,6 +63,36 @@ def Choice(question, *answers, target=None):
             pass
         print(f"Invalid input. Please enter a number between 1 and {len(answers)}.")
 
+def Send_Ending_To_Dev(ending):
+    global ip_address
+    # This is to check ending frequency, IP is oddly best way to segment
+
+    payload = {
+        "content":
+            "*Ending Reached*\n"
+            f"User: {ip_address}\n"
+            f"Ending Reached: {ending}"
+    }
+
+    # Should probably make this step its own function since it's used multiple times
+    data = json.dumps(payload).encode("utf-8")
+
+    req = urllib.request.Request(
+        SECRETS.ALT_WEBHOOK,
+        data=data,
+        headers={
+            "Content-Type": "application/json",
+            "User-Agent": "Mozilla/5.0"
+        }
+    )
+
+    try:
+        urllib.request.urlopen(req)
+    except Exception as e:
+        print("\nStatus:", e.code)
+        print("Response:", e.read().decode())
+        input()
+
 def Free_Write(question, search_for=None):
     global question_num
     question_num += 1
@@ -104,7 +141,7 @@ def Send_Data_To_Dev(previously_sent):
             "**New Personality Test Ticket**\n"
             f"Discord: @{tag}\n"
             f"Description: {desc}\n"
-            f"IP Adress: {ip_address}" # people put a lot of value in ip addresses, but they're actually basically worthless, this is just to annoy people
+            f"IP Address: {ip_address}" # people put a lot of value in ip addresses, but they're actually basically worthless, this is just to annoy people
     }
 
     data = json.dumps(payload).encode("utf-8")
@@ -127,10 +164,12 @@ def Send_Data_To_Dev(previously_sent):
         input("\nYour response has not been recorded. Please send the above to the developer. Press enter to continue... ")
 
 def main():
-    global question_num, previously_sent_data
+    global question_num, previously_sent_data, ip_address
     question_num = 0
 
-    Send_Data_To_Dev(False)
+    ip_resolved = True
+    if ip_address == False:
+        ip_resolved = False
 
     Display_Beginning()
     bread_rank = Choice("What are your thoughts on cornbread?", "It's not the worst", "I fear giving my true feelings", "Burn it in the holy flames")
@@ -142,7 +181,7 @@ def main():
         ])
     
     # Do not record score, I do not care
-    Choice("Sorry about that, had to filter the freaks. Do you prefer working alone or in groups?", "I prefer working alone", "I can work in groups, but I prefer working alone", "I love working in groups")
+    Choice("Sorry about that, had to filter the fools. Do you prefer working alone or in groups?", "I prefer working alone", "I can work in groups, but I prefer working alone", "I love working in groups")
     Choice("How do you prefer to socially recharge?", "Being around people energizes me", "I spend time with people I'm close to", "I prefer to be alone for a bit")
     Choice("How do you handle stressful situations?", "I thrive under pressure", "I don't get in to stressful situations", "I get overwhelmed easily")
     Choice("Do you prefer to plan things out or be spontaneous?", "I like to plan everything out", "Things just happen to me so I adapt", "I prefer to be spontaneous")
@@ -202,8 +241,7 @@ def main():
     Choice("What is your favorite season?", "Spring", "Summer", "Fall")
 
     # IP check (no answers recorded)
-    ip_address = get_public_ip()
-    if ip_address != "Unable to resolve IP address":
+    if ip_resolved:
         Choice(f"Is {ip_address} your IP address?", "Yes", "Yes?", "Yes, why?")
 
     liar += Choice("How long do you think you could pretend to be someone else in casual conversation?", "I could keep it up for hours", "I could try, but my heart wouldn't be in it", "I have no interest in impersonating someone else", target=1)
@@ -379,17 +417,17 @@ def main():
     frog_happiness = Choice(f"You are now aboard the trolley with the ability to change tracks. One problem: you can't reach the switch. \n{frog_name} looks up at you and explains that he would be able to reach the lever if throw him. \nThe other track is empty, but the force of the turn would throw {frog_name} out of the trolley and to his death. Do you sacrifice his life to save the people? \nNote that this is only theoretical and neither answer will kill him.", "Yes", "No", target=2)
     frog_location = Choice(f"{frog_name} has gotten bored of all these philosophy questions and wants to go out somewhere. He'll be back later, though. Where should he go?", "Steve's Adventuring Shop", "The Frog Spa", "The Library", "A Freelance Frogging Gig")
     # These would be easier with switches, but not everyone has the right python version
-    if (ans == 0): # Adventuring shop
+    if (frog_location == 0): # Adventuring shop
         frog_location = "adventuring shop 1" # name for easier reference
         # start an adventuring mini-game later
-    elif (ans == 1): # Frog spa
+    elif (frog_location == 1): # Frog spa
         frog_location = "the spa"
         frog_happiness += 1
         # just boosts happiness and makes your frog feel refreshed :)
-    elif (ans == 2): # The library
+    elif (frog_location == 2): # The library
         frog_location = "the library"
         # find the answer string to a future or past question
-    elif (ans == 3): # Freelance gig
+    elif (frog_location == 3): # Freelance gig
         frog_location = "his freelance gig"
         frog_happiness -= 1
         # gives worthless frog bucks at the end, maybe reduces frog happiness?
@@ -481,7 +519,7 @@ def main():
     if frog_location == "adventuring shop 2":
         ans = Choice(f"Looks like {frog_name} is back from the adventuring shop (again)! He has the adventuring gear he wanted! \nUnfortuntely, {frog_name} knows that frogs have some difficulty adventuring. Will you go for him?", "I will take up the challenge!", "Sell the gear for a profit", "Hold on to it for yourself")
         if ans == 0: # accept the call
-            outcome = submenu.Minigame(frog_name)
+            outcome = submenu.Minigame()
             if outcome:
                 Display_Ending("ADVN - Dungeon Crawler", [
                     "You rose to the challenge. You fought the dragon. You won. You freed some people, probably.",
@@ -647,6 +685,67 @@ def main():
     elif ans == 1:
         aggression += 1
     elif ans == 4:
-        Choice("What? Why not?", "I have no received an invite", "It's not my kind of game")
+        Choice("What? Why not?", "I have not received an invite", "It's not my kind of game", "I am a coward", "It's the urn changes")
+    procrastinator += Choice("How goes that project you've been working on?", "Great, thanks!", "I've been making progress here and there", "It's uh... I'll get to it", target=3)
 
-main()
+    # I'm just doing mostly random combinations now
+    if clinginess >= 4 and empath <= 1 and confidence <= 1:
+        Display_Ending("RTKG - Rat King", [
+            "Okay, so the rats are doing their thing.",
+            "They're doing their little rat social things.",
+            "They're playing and they're laughing and they're doing cocaine nonstop.",
+            "Rat runs home, pokes his beak out of the burrow and screams for like two days.",
+            "And all the other rats are like frozen stiff.",
+            "A two-day rat screaming fit is no trival thing.",
+            "This is hard on the rat.",
+            "The rat goes out and there is a cat.",
+            "Rats are not rabbits, after all.",
+            "So the rat, the intrepid rat, it goes out and is like \"Wow, the world is so pathetic\"",
+            "The rat, high on ketamine, like most rats are, goes out and obliterates the country of Sudan",
+            "You see, the rat, the big rat at least, doesn't approve of people stealing his ketamine.",
+            "One of the things people often ask is \"How can we use the rat as a bigger rat?\"",
+            "The little rat is an excellent person.",
+            "The little rat goes out and seeks cocaine.",
+            "...",
+            "...",
+            "...",
+            "No, I'm not elaborating.",
+            "This should all already make sense to you."
+        ])
+    if perfectionist >= 3 and procrastinator == 0 and liar <= 1 and risk_taker <= 1:
+        Display_Ending("EMPY - Employed", [
+            "\"Hey, you want to do something tomorrow?\" - I can't, I have work.",
+            "\"We should play a 10 hour civ 5 marathon\" - Sorry, I have work tomorrow.",
+            "\"Man, it's so hard to get money nowadays :(\" - Not for me, I have work.",
+            "Actual interactions you've had. Probably all this week.",
+            "This is because you have a job.",
+            "But that is who you are.",
+            "Nothing more.",
+            "I'm sorry, but it's terminal."
+        ])
+    if confidence >= 3 and risk_taker > 0 and perfectionist <= 1 and aggression <= 1:
+        Display_Ending("VAMP - Sanguine", [
+            "Worries are for your lessers.",
+            "When life gives you lemons, you draw a bath of lemonade, some lemon candles, and enjoy a nice warm bath.",
+            "Of lemonade.",
+            "You adapt easily and quickly, and try to keep things positive.",
+            "The strongest winds hardly sway you, though the scent of garlic drives you from where you stand.",
+            "You don't go into houses unless invited (it's only polite) and you never see yourself in mirrors (since you don't dwell on appearance).",
+            "Wait, which definitation am I using for this?",
+            "Eh, who cares, I think this captures you pretty well."
+        ])
+    if clinginess >3 and procrastinator >2 and awkward >2:
+        Display_Ending("COLN - Chronically Online", [
+            "Your status never fades from green.",
+            "You probably call yourself somelike like \"an online microcelebritiy\".",
+            "You have a vast portfolio of stolen posts and useless likes.",
+            "Don't worry, grass isn't real, it can't hurt you.",
+            "Something tells me you're going to post this result somewhere. You should.",
+            "Send everyone you know the exe. Do not explain."
+        ])
+    # Pending personalities
+    # Caloric  
+    # Melcoholy
+    # Phlagmatic
+
+First_Start()
