@@ -825,6 +825,45 @@ def main():
         ])
     Choice("Just so you know, the frog happiness ending is no longer available. You failed. There have been 5 potential happiness sources and you needed at least 3.", "Oh :(")
 
+    if perfectionist >= 3 and procrastinator >= 3 and indecision >= 1:
+        Display_Ending("MORE - One of Infinite Ideas (But Perhaps Few Results)", [
+            "Your creativity is impressive, perhaps unrivaled.",
+            "Your list of ideas is no doubt a mile long. All great ideas, I'm sure",
+            "It's really not fair how life or procrastination gets in the way of getting those projects done.",
+            "Did you know this personality test took over three months to make? And that most of that time was just not working on it.",
+            "All I'm saying is that we have a lot in common.",
+            "Except, if you're reading this, I actually finished.",
+            "Maybe it's time for you to get to work on that novel or animation or something.",
+            "Don't pressure yourself though. No need to chase completion for its own sake. Only if you're enjoying it.",
+            "Unless it's for work or something."
+        ])
+
+    Choice("Hmm... not many questions left on my list. We must be pretty close to the end. Let's see what's left... \nWhat's your favorite direction?", "Left", "East", "Starboard", "Away")
+    Choice("What's your political party?", "Moon or Bust", "Nullifier Party", "Irish Republican Army", "Nova Scotian Independance Party", "Tuvan People's Revolutionary Party", "The Nicks, Babey")
+    Choice("Would you move from your current state?", "I'd be gone before you finish your sentence", "I could be convinced by circumstances", "I could be convinced by money", "I'm a loyalist forever", "I've always always preferred liquid")
+    Choice("Do you spare spiders?", "Look weird, get smited. Smitten? Killed.", "No, they're helpful!", "As long as they don't bother me, they can do whatever", "I actively hunt them down")
+    Choice("Spirit or Gun?", "Spirit Burst", "Sustained Spirit", "Hybrid", "Gun Spirit", "Pure Gun", "GREEN")
+    Choice("What's your role?", "Tank", "Support", "Assassin", "DPS", "Scapegoat", "Healer", "Team Leader")
+    Choice("Looks like this list is getting narrow.", "...")
+    Choice("Like, really narrow.", "Uh huh.")
+    Choice("Like there's only one questions left. And one of them is this one.", "Oh no...")
+    Choice("Looks like this is the end for us. Any last words?", "See you next loop!", "Farewell, friend.", "What a waste of time.", "What about the rocks? I chose three rocks!", f"I will meet {frog_name} in Valhalla", "What comes next?", "Just one more question...")
+
+    Display_Ending("ENGM - Unreadable", [
+        "Hello. I'm Burrtail, the developer of this personality test. Sit for a second and let's talk.",
+        "You see, one of the most difficult parts of making a personality test is that there's a lot of personalities.",
+        "I've asked around, I've researched, I've stolen. Unfortunately, there's no reference list for humor.",
+        "Today, I failed to find you a valid personality. If this is the first (or second if you got filtered) time taking the test, I'm sorry as I have failed.",
+        "For all involved, however, I'd like to invite you to suggest a personality. Any at all. Or questions. Or, while we're at it, personality vectors.",
+        "Thank you for playing, especially if you've played through multiple times to see if you can get to the 'true' ending!",
+        "If you haven't already, try completing the dragon slayer ending. It's actually a really interesting fight! It occurs some time before your frog goes to bed, go find it!",
+        "I appreciate you giving my multi-month, terribly coded joke-turned-project a chance!",
+        "Hopefully no one claimed the steam game before you...",
+        "- @Burrtail",
+        "",
+        "P.S. That's who you should DM for suggestions!"
+    ])
+
     # Pending personalities
     # Caloric
 

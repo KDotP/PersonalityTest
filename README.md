@@ -20,7 +20,15 @@ Several small hints and details are contained in the code which may deminish the
 
 In order to run this program, a `SECRETS.py` file is required. In this file, there must be several string variables called `WEBHOOK`, `WEBHOOK_ALT`, and `GAME_KEY`.
 
-These can be an empty strings, or can be set to valid webhooks/keys.
+These can be an empty strings, or can be set to valid webhooks/keys, but the variables must be defined in order for the program to run.
+
+Example (all of these are valid):
+
+`WEBHOOK = "X"`
+
+`WEBHOOK_ALT = "https://website.com/api/webhooks/webhookcode/lotsoflettersandnumbers"`
+
+`GAME_KEY = ""`
 
 ---
 
