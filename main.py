@@ -1,7 +1,7 @@
 import random, urllib.request, json
 import mematics # Cool visualizer
 import submenu # Dungeon
-import SECRETS # if you want to build this yourself, create a file called SECRETS.py and create a WEBHOOK string, either as empty or a real discord webhook (also GAME_KEY)
+import SECRETS # if you want to build this yourself, create a file called SECRETS.py and create a WEBHOOK string, either as empty or a real discord webhook (also GAME_KEY and WEBHOOK_ALT)
 
 question_num = 0
 previously_sent_data = False
@@ -10,8 +10,6 @@ ip_address = False
 def First_Start():
     global ip_address
     ip_address = get_public_ip() # Required to request version control 
-    while True:
-        main() # No longer recursive :) 
 
 def Display_Ending(ending_name, ending_lore):
     Send_Ending_To_Dev(ending_name)
@@ -25,6 +23,7 @@ def Display_Ending(ending_name, ending_lore):
     print("Press enter if you would like to take the test again.", end=" ")
     input() # Wait for enter to continue
     print("")
+    main() # Recursive call (will crash eventually because this is poorly programmed) :)
 
 # Unified question/answer function.
 # Pass any number of answer strings after the question.
@@ -612,7 +611,7 @@ def main():
     # Another bit, though more subtle, helps break up the persistent tempo
     bunch_of_rocks = ["Quartz", "Gold-Painted Rock", "Cursed Rock", "Pebble", "Volcanic Rock", "Uranium", "Obsidian", "Chalk", "Marble", "Granulite", "Whiteschist", "Flint", "Pyrite", "Magic Rock", "10kg of Steel"]
     ans = Choice("If you convinced a bunch of medieval peasants you were a wizard and you had to give one a choice of one of three rocks, what's the first rock you would offer?", bunch_of_rocks)
-    selected_rocks = bunch_of_rocks[ans]
+    selected_rocks = bunch_of_rocks[ans] # Currently concats to a single big string, but unused so meh
     bunch_of_rocks.remove(bunch_of_rocks[ans])
     ans = Choice("If you convinced a bunch of medieval peasants you were a wizard and you had to give one a choice of one of three rocks, what's the second rock you would offer?", bunch_of_rocks)
     selected_rocks += bunch_of_rocks[ans]
@@ -764,7 +763,7 @@ def main():
     # Return true if all points are in a single stat, false otherwise
     def Character_Builder(total_points):
         # strength, dexterity, intelligence, wisdom, charisma
-        current_stats = {-1, -1, -1, -1, -1}
+        current_stats = [-1, -1, -1, -1, -1]
         print("--- Build your character! ---")
         for i in range(total_points):
             print(f"Remaining stat picks: {total_points - i}")
