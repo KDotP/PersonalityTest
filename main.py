@@ -10,6 +10,7 @@ ip_address = False
 def First_Start():
     global ip_address
     ip_address = get_public_ip() # Required to request version control 
+    main()
 
 def Display_Ending(ending_name, ending_lore):
     Send_Ending_To_Dev(ending_name)
