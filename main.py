@@ -760,7 +760,72 @@ def main():
             "I was considering digging through your files for a more funny ending, but I don't even have to look to know your naming format is unreadable.",
             "I'd joke about you more, but let's be real, the developer of this probably belongs in this category."
         ])
+
+    # Return true if all points are in a single stat, false otherwise
+    def Character_Builder(total_points):
+        # strength, dexterity, intelligence, wisdom, charisma
+        current_stats = {-1, -1, -1, -1, -1}
+        print("--- Build your character! ---")
+        for i in range(total_points):
+            print(f"Remaining stat picks: {total_points - i}")
+            print(f"Current stat spread:\n    Strength: {current_stats[0]}\n    Dexterity: {current_stats[1]}\n    Intelligence: {current_stats[2]}\n    Wisdom: {current_stats[3]}\n    Charisma: {current_stats[4]}")
+            ans = Choice("Which stat will you improve?", "Strength", "Dexterity", "Intelligence", "Wisdom", "Charisma")
+            current_stats[ans] += 1
+            if current_stats[ans] - 1 == total_points:
+                return True
+            print()
+
+        return False
+    ans = Character_Builder(8)
+    if ans == True: # I don't remember how python handles t/f and I'm not gonna check
+        Display_Ending("QTST - QA Tester", [
+            "A QA tester walks into a bar.",
+            "Runs into a bar.",
+            "Orders a beer.",
+            "Orders 2 beers.",
+            "Orders -1 beers.",
+            "Orders a personality test ending.",
+            "Gets a personality test ending.",
+            "Either that or your character is just REALLY unbalanced.", 
+            "I think I'm doing a favor to everyone by preventing such an unbalanced character from being released into the world."
+        ])
+
+    frog_happiness += Choice("You win the lottery! What are you doing with the money? After personal frivolous expenses.", "Buying everything I've ever wanted", "I'm gonna start a foundation and give every spare dollar to a worthly cause", "I'll take care of every friend and family memeber for the rest of their lives", f"I'm giving it all to {frog_name}", target=4)
+    Choice("Does P = NP?", "Yes", "No")
+    ans = Choice("Pick the odd one out:", "Tango", "Whiskey", "Foxtrot", "Alpha", "Delta", target=4)
+    if ans == 0:
+        ans = Choice("Please pick the correct pronunciation for 'A'.", "Alfa", "Able", "Actor", "Ace", "Adam", target=1)
+    Choice("Low flying F35! What's your tool of choice?", "Stinger", "Verba", "QW-4", "Type 91")
+    ans = Choice("Target is maneuvering! Ready your shot!", "Lead left", "Lead fast", "Lead right", "Lead slow", target=4)
+    if ans == 1:
+        Choice("Good hit! Target is going down! Chute visible, what's the plan?", "Resuce the pilot and nurture them back to health", "Find the wreckage and steal as many components as possible", "Record a video for propaganda purposes", target=1) #FINISH
+        if ans == 1:
+            ans = Choice("The pilot has recovered and promised you a wish in exchange. What are you wishing for?", "A personality", "Frog food", "Hints for the dungeon crawler minigame")
+            if ans == 0:
+                Display_Ending("PLOT - Pilot", [
+                    "With no celestial powers to force an ending on their own, the pilot offers you a license which will begin an ending.",
+                    "According to your newly found license, you have 2,119 hours of total time, many of those hours being turbine PIC.",
+                    "If you really wanted to, you could get your ATP. Or maybe get a bush pilot gig.",
+                    "I'd say you can get a job as an airline pilot, but airlines don't exist in this survey.",
+                    "At least now you have an excuse to be an alcoholic!"
+                ])
+            elif ans == 1:
+                frog_happiness += 1
+            elif ans == 2:
+                Choice("The pilot sits you down in a chair (which you have apparently) and begins to explain. \n'Listen, in the fights leading up to the dragon, you're greatly favored. Strategy isn't needed, just choose what feels wise to you. \nIn the dragon fight, balancing momentum is vital. Without it, you face penalties and risks. The dragon's powerful dragonflight attack can only activate when the dragon has 3 or more momentum. \nIt's generally unwise to use your 5-momentum attack since maintaining high momentum has so many more advantages. That said, use it if it will finish the dragon off!'", "Wow, thanks!")
+    frog_happiness += Choice(f"Prove you've been paying attention! What's {frog_name}'s favorite food?", "Hawaiian Pizza", "Dark Chocolate", "Durian", "Lutefisk", "Cornbread", "Vegemite and toast", "Black licorice", "Beets", target=2)
+    if frog_happiness >= 3:
+        Display_Ending("HAPY - Happy Frog Owner", [
+            "Among the most coveted endings, and you earned it!",
+            f"{frog_name} is here too, and he's super happy! I mean, that's why you got this ending, but still.",
+            "You've done well, and you should be proud.",
+            "The developer of this survey has also been notified of your success. There's no identifiable info recorded, but he'll be proud of you if you tell him.",
+            "Or so I'm told. I'm just a survey program.",
+            "Good job again."
+        ])
+    Choice("Just so you know, the frog happiness ending is no longer available. You failed. There have been 5 potential happiness sources and you needed at least 3.", "Oh :(")
+
     # Pending personalities
-    # Caloric  
+    # Caloric
 
 First_Start()
