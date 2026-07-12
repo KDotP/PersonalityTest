@@ -18,9 +18,9 @@ Several small hints and details are contained in the code which may deminish the
 
 ## Excluded Files
 
-In order to run this program, a `SECRETS.py` file is required. In this file, there must be a string variable called `WEBHOOK`.
+In order to run this program, a `SECRETS.py` file is required. In this file, there must be several string variables called `WEBHOOK`, `WEBHOOK_ALT`, and `GAME_KEY`.
 
-WEBHOOK can be an empty string, or can be linked to your own Discord Webhook.
+These can be an empty strings, or can be set to valid webhooks/keys.
 
 ---
 

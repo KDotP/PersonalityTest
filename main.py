@@ -5,12 +5,13 @@ import SECRETS # if you want to build this yourself, create a file called SECRET
 
 question_num = 0
 previously_sent_data = False
-ip_address = 0
+ip_address = False
 
 def First_Start():
     global ip_address
-    ip_address = get_public_ip()
-    main()
+    ip_address = get_public_ip() # Required to request version control 
+    while True:
+        main() # No longer recursive :) 
 
 def Display_Ending(ending_name, ending_lore):
     Send_Ending_To_Dev(ending_name)
@@ -24,7 +25,6 @@ def Display_Ending(ending_name, ending_lore):
     print("Press enter if you would like to take the test again.", end=" ")
     input() # Wait for enter to continue
     print("")
-    main() # Loop back to start, leaving previous loops in memeory (bad)
 
 # Unified question/answer function.
 # Pass any number of answer strings after the question.
@@ -89,13 +89,15 @@ def Send_Ending_To_Dev(ending):
     try:
         urllib.request.urlopen(req)
     except Exception as e:
-        print("\nStatus:", e.code)
-        print("Response:", e.read().decode())
-        input()
+        pass
 
 def Free_Write(question, search_for=None):
     global question_num
     question_num += 1
+
+    if search_for != None:
+        search_for = search_for.lower()
+
     print("")
     print("───────────────────────────────")
     print(f"Question {question_num}: {question}")
@@ -111,7 +113,7 @@ def Free_Write(question, search_for=None):
     return ans
 
 def Display_Beginning():
-    print("Welcome to the world's only accurate personality test. This will be a grueling and difficult test, but if you can make it through, you will be provided with unprecidented incite into your very heart and soul.")
+    print("Welcome to the world's only accurate personality test. This will be a grueling and difficult test, but if you can make it through, you will be provided with unprecedented insight into your very heart and soul.")
     print("The test will consist of a number of questions. Each question will have 3 possible answers. You will be asked to choose the answer that best describes you.")
     print("To answer a question, simply type the number of the answer you choose and press enter. For example, if you choose the first answer, you would type '1' and press enter.")
     print("Please do not type any other characters or words, as the such an answer will be rejected and you will be asked to answer the question again.")
@@ -121,7 +123,7 @@ def get_public_ip():
     try:
         return urllib.request.urlopen('https://api.ipify.org').read().decode('utf8')
     except:
-        return "Unable to resolve IP address"
+        return False
 
 def Send_Data_To_Dev(previously_sent):
     if previously_sent:
@@ -174,8 +176,8 @@ def main():
     Display_Beginning()
     bread_rank = Choice("What are your thoughts on cornbread?", "It's not the worst", "I fear giving my true feelings", "Burn it in the holy flames")
     if bread_rank == 0:
-        Display_Ending("DIS - Dissapointing", [
-            "Appologies, but as an advanced personality-determining AI, I have been instructed to bar individuals that may be considered a \"public nuisance\" from taking the test.",
+        Display_Ending("DIS - Disappointing", [
+            "Apologies, but as an advanced personality-determining AI, I have been instructed to bar individuals that may be considered a \"public nuisance\" from taking the test.",
             "Unfortunately (for you), the cornbread index is a recognized metric in personality testing, closely aligned with the worst among humanity.",
             "You may opt to try again if your belief in cornbread is less than full."
         ])
@@ -250,7 +252,7 @@ def main():
         Display_Ending("AKWD - Awkward Test Taker", [
             "Look.",
             "Maybe we got off on the wrong foot. Maybe you were forced to take this test against your will. But at least I'm out here trying.",
-            "You're giving me nothing here. What, you thought that answering \"...\" at every available oppertonity was going to get you some special ending?",
+            "You're giving me nothing here. What, you thought that answering \"...\" at every available opportunity was going to get you some special ending?",
             "Congrats, you got it! Now we're both just sitting here, a little uncomfortable, not sure what to say. I hope you're happy with yourself."
         ])
     procrastinator = Choice("You are given a difficult task you must complete within a month, how do you approach it?", "Get it done as fast as possible", "Get a bit done one day at a time", "Get everything done in the last week", target=3)
@@ -378,7 +380,7 @@ def main():
                     repeat = False
         # Transparent box with a ring inside
         elif (box == 8):
-            ans = Choice(f"Insie the box is... well, it's a small diamond ring. Huge surprise there. \nGive it to {frog_name}?", "Yes", "No", target=1)
+            ans = Choice(f"Inside the box is... well, it's a small diamond ring. Huge surprise there. \nGive it to {frog_name}?", "Yes", "No", target=1)
             if (ans == 1):
                 frog_name = "Fancy " + frog_name
 
@@ -407,7 +409,7 @@ def main():
         # Thank you wikipedia
         pilo_sub = "Xenofeminism"
 
-    Choice(f"{frog_name} has brought you a different philosopical framework which it feels is more closely aligned to you: {pilo_sub}. \nWould you like to replace your answer with the one {frog_name} provided?", "Yes", "No")
+    Choice(f"{frog_name} has brought you a different philosophical framework which it feels is more closely aligned to you: {pilo_sub}. \nWould you like to replace your answer with the one {frog_name} provided?", "Yes", "No")
     perfectionist += Choice("Do you believe something can be perfect?", "Can and should be", "It's relative", "Nothing can ever be perfect", target=1)
     edgy += Choice("How much money would \"enough\" for you?", "I'd work for free if I didn't have any expenses", "I expect fair compensation for my work", "I want to be wealthier than the average person", "I want to be rich, even if it comes at the cost of others", "I want to be richer than god and I'm willing to be the next Elon Musk to do it", target=5)
     edgy += Choice("Let's discuss the famous trolley problem. \nAn unstoppable trolley is rolling down a path. On its current track, it will hit five people, killing them. \nYou currently stand next to a lever than could switch the trolley's path. On the other path, it would kill one person. \nRather than a simple binary choice, which reasoning resonates most to you?", "I don't flip the switch because doing so would be active involvement, making me responsible for the death.", "I flip the switch so as to save as many lives as possible.", "I flip the switch because it is the right thing to do, and what the people on the track would expect me to do.", "I do not flip the switch since the person on the other track is not required to make a sacrifice for the 'greater good'.", "I do not flip the switch since doing so would result in killing someone, which goes against the rules of society.", "I accept whichever choice I come up with first. Philosophy is just justifying the first thing that comes to mind.", "I do not flip the switch so as to kill the most people.", "I refuse to decide because I do not believe one person's life can be weighed against another's.", "I do not intervene because I may not understand the full situation, and acting could make this worse.", target=7)
@@ -447,9 +449,9 @@ def main():
             "You might be well suited for politics, at least."
         ])
     elif (confidence == 0 and edgy >= 2):
-        Display_Ending("ROUG - Coniving Foe", [
-            "Since you were a child, you were lurking in the shadows, waiting for the opperunity to strike.",
-            "In every DnD game, you play a rouge with dead parents. Probably assassin too.",
+        Display_Ending("ROUG - Conniving Foe", [
+            "Since you were a child, you were lurking in the shadows, waiting for the opportunity to strike.",
+            "In every DnD game, you play a rogue with dead parents. Probably assassin too.",
             "You plan, you plot, you probably have a plan for if you woke up tomorrow as the president.",
             "Since your personality matrix indicates a low confidence, you probably weren't invited to the island, so at least you've got that going for you."
         ])
@@ -514,10 +516,10 @@ def main():
             "You probably work in tech."
         ])
 
-    empath = Choice("Do you view other people's happiness as your responsibilty?", "I would sacrifice my own happiness to make someone else happy", "I will do what I can to make other people happy, but not at a cost to myself", "I will do what I can to make people happy, but I won't go out of my way to do so", "I've got too many things to worry about with my own happiness, nonetheless someone else's", target=1)
+    empath = Choice("Do you view other people's happiness as your responsibility?", "I would sacrifice my own happiness to make someone else happy", "I will do what I can to make other people happy, but not at a cost to myself", "I will do what I can to make people happy, but I won't go out of my way to do so", "I've got too many things to worry about with my own happiness, nonetheless someone else's", target=1)
     hubris += Choice("Do you think you could survive time traveling back in time?", "I'd probably die from some extinct disease", "I don't think anyone would believe I'm a time traveler", "Most people back then were peasants, I don't think I'd be special", "I think I could survive for a while", "I'd be running the place", target=5)
     if frog_location == "adventuring shop 2":
-        ans = Choice(f"Looks like {frog_name} is back from the adventuring shop (again)! He has the adventuring gear he wanted! \nUnfortuntely, {frog_name} knows that frogs have some difficulty adventuring. Will you go for him?", "I will take up the challenge!", "Sell the gear for a profit", "Hold on to it for yourself")
+        ans = Choice(f"Looks like {frog_name} is back from the adventuring shop (again)! He has the adventuring gear he wanted! \nUnfortunately, {frog_name} knows that frogs have some difficulty adventuring. Will you go for him?", "I will take up the challenge!", "Sell the gear for a profit", "Hold on to it for yourself")
         if ans == 0: # accept the call
             outcome = submenu.Minigame()
             if outcome:
@@ -545,7 +547,7 @@ def main():
                     "Being dead and all, that is."
                 ])
         elif ans == 1: # sell the gear
-            sale = Choice(f"Selling the gear earned fiften whole frog bucks! \n{frog_name} offers them to you.", f"Thank you, {frog_name}", "Keep them for yourself", target=1) # do not override ans
+            sale = Choice(f"Selling the gear earned fifteen whole frog bucks! \n{frog_name} offers them to you.", f"Thank you, {frog_name}", "Keep them for yourself", target=1) # do not override ans
             if sale == 1:
                 frog_bucks += 15 # 10 profit
         elif ans == 2: # hold on to
@@ -562,7 +564,7 @@ def main():
         ])
 
     Choice(f"{frog_name} is tired now and is heading to bed. Say good night to {frog_name}!", f"Good night, {frog_name}!", "Good night!")
-    Send_Data_To_Dev(previously_sent_data) # reports anamolous info, sends requests to discord (yes, really this time)
+    Send_Data_To_Dev(previously_sent_data) # reports anomalous info, sends requests to discord (yes, really this time)
     previously_sent_data = True # regardless of outcome, does not apply when reopening application
     empath += Choice("You find someone crying on the sidewalk. You need to be somewhere important in a few minutes. What do you do?", "Leave some crying space for me!", "I have enough problems of my own", "Comfort them if you have enough time", "You'll get them feeling better, even if it means I'm late", target=4)
     hubris += Choice("You're in an arena fight with a lion. You get to choose any primitive weapon of your choice. Who's winning?", "Any weapon? I got this", "I'll be a puddle of blood within a few minutes", target=1)
@@ -621,12 +623,12 @@ def main():
 
     perfectionist += Choice("If one pixel on your monitor isn't working, what would you do?", "If the monitor has a high enough resolution, I probably wouldn't even notice", "Into the trash you go! I'm getting a new monitor", "I can probably try to fix it myself", "Monitor? I'm taking this on a stone tablet", target=2)
     judgy = 0 # Can be negative, flushing this out real quick
-    ans = Choice("You see someone doing something that's recommended against in the instructions. How do you respond?", "Walk over and point out the better way to do it", "I wouldn't confront them, but I'm definetly going to judge from a distance", "Why should I care?")
+    ans = Choice("You see someone doing something that's recommended against in the instructions. How do you respond?", "Walk over and point out the better way to do it", "I wouldn't confront them, but I'm definitely going to judge from a distance", "Why should I care?")
     if ans == 1:
         judgy += 1
     elif ans == 2:
         judgy -= 1
-    ans = Choice("You're at work and notice a coworker breaking a safety or sanitary proceedure. What do you do?", "Either confront the rule-breaker or report it depending on circumstance. Safety is no joke", "Do something about it if it's repeated, we all make mistakes", "Laws were made to be broken")
+    ans = Choice("You're at work and notice a coworker breaking a safety or sanitary procedure. What do you do?", "Either confront the rule-breaker or report it depending on circumstance. Safety is no joke", "Do something about it if it's repeated, we all make mistakes", "Laws were made to be broken")
     if ans == 0:
         judgy += 1 # not unwarranted
         risk_taker -= 1
@@ -639,12 +641,12 @@ def main():
         judgy += 1
 
     if judgy >= 3:
-        if selected_religion != "Atheist":
+        if selected_religion != "Atheism":
             Display_Ending("SPRT - Judgy Theist", [
                 "If you've ever worked in food service, you've always feared one, but never saw yourself as one.",
                 f"Maybe it's not your fault. As a believer in {selected_religion}, judginess comes easily.",
                 "Politicians love you. Retail workers hate you. It's okay though, you hate them back.",
-                f"You likely spend your weekends shouting at non-believers to convert or face... whatever concequences {selected_religion} threatens.",
+                f"You likely spend your weekends shouting at non-believers to convert or face... whatever consequences {selected_religion} threatens.",
                 "I don't know, I'm a personality test AI, it's not exactly my field of expertise.",
                 "You'll probably find a job in the clergy, then resign when it turns out you're not practicing what you preach or something."
             ])
@@ -659,8 +661,8 @@ def main():
     if judgy < 0:
         if risk_taker >= 1: # I don't need to justify myself to you, imaginary reader
             Display_Ending("OUTC - Social Explorer", [
-                "There is no information too insignifigant to escape your interest.",
-                "'Weirdness' is a term by those who lack the curosity to ask questions, and a term so often applied to you.",
+                "There is no information too insignificant to escape your interest.",
+                "'Weirdness' is a term by those who lack the curiosity to ask questions, and a term so often applied to you.",
                 "You have no issue associating with the outcasts or the weirdest of society. They make for the most interesting conversations, after all.",
                 "Emails line your inbox with all the random people you have email threads—sorry? Oh, yes, correspondences with.",
                 "You'll probably be offered a job which you've never heard of before by someone you haven't talked to in a decade and it will pay enough to sustain you for the rest of your life."
@@ -737,15 +739,28 @@ def main():
     if clinginess >3 and procrastinator >2 and awkward >2:
         Display_Ending("COLN - Chronically Online", [
             "Your status never fades from green.",
-            "You probably call yourself somelike like \"an online microcelebritiy\".",
+            "You probably call yourself something like like \"an online microcelebrity\".",
             "You have a vast portfolio of stolen posts and useless likes.",
             "Don't worry, grass isn't real, it can't hurt you.",
             "Something tells me you're going to post this result somewhere. You should.",
             "Send everyone you know the exe. Do not explain."
         ])
+    if aggression <= 1 and risk_taker <= 1 and clinginess <= 1 and confidence <= 1:
+        Display_Ending("PHLG - Phlegmatic", [
+            "Nothing sways you. Not the tide, not the news that you've won the lottery, nothing.",
+            "Stress arrives, but you care too little to be affected by it.",
+            "Perhaps you are a victorian child, forever burdened by a disease you suffered through half your life ago (3 years).",
+            "You will never reach the strength or ambition of others, but that's probably for the best because they seem pretty stressed."
+        ])
+    if perfectionist >= 4 and procrastinator >= 2 and empath >= 2:
+        Display_Ending("MELC - Melancholy", [
+            "Let me guess, you were mature in when you were in school?",
+            "You were gifted, talented, driven, or some other term for someone who clearly needs to relax a little.",
+            "Let we forget, you're probably on ADHD and/or depression meds now.",
+            "I was considering digging through your files for a more funny ending, but I don't even have to look to know your naming format is unreadable.",
+            "I'd joke about you more, but let's be real, the developer of this probably belongs in this category."
+        ])
     # Pending personalities
     # Caloric  
-    # Melcoholy
-    # Phlagmatic
 
 First_Start()
