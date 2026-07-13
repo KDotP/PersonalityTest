@@ -1,7 +1,22 @@
-import random, urllib.request, json
+import random, urllib.request, json, sys
 import mematics # Cool visualizer
 import submenu # Dungeon
 import SECRETS # if you want to build this yourself, create a file called SECRETS.py and create a WEBHOOK string, either as empty or a real discord webhook (also GAME_KEY and WEBHOOK_ALT)
+# CORRECTION! I think I made it OK to not have proper SECRETS setup? Just have a file with that name. SECRETS.py. Probably :)))
+
+# Defensive importing
+try:
+    import mematics
+except ImportError:
+    mematics = None
+try:
+    import submenu
+except ImportError:
+    submenu = None
+try:
+    import SECRETS
+except ImportError:
+    SECRETS = None
 
 question_num = 0
 previously_sent_data = False
@@ -21,10 +36,17 @@ def Display_Ending(ending_name, ending_lore):
     for line in ending_lore:
         print(line)
     print("───────────────────────────────")
-    print("Press enter if you would like to take the test again.", end=" ")
+    print("Press enter if you would like to take the test again.", end=" ") # Why did I do it this way??
     input() # Wait for enter to continue
     print("")
-    main() # Recursive call (will crash eventually because this is poorly programmed) :)
+    try:
+        main() # Recursive call (will crash eventually because this is poorly programmed) :)
+    except Exception:
+        print("--- Oh no! You've repeated the survery too many times! ---")
+        print("Sorry about that, but this whole survey thing is poorly programmed! I'm afraid it will have to crash!")
+        print("Don't worry, you can relaunch. Some data may be lost, but nothing important, I promise :)")
+        input("Press enter to exit! ")
+        sys.exit(0) # Quit safely
 
 # Unified question/answer function.
 # Pass any number of answer strings after the question.
@@ -52,7 +74,7 @@ def Choice(question, *answers, target=None):
     print("───────────────────────────────")
 
     while True:
-        choice = input("Your answer: ")
+        choice = input("Your answer: ").strip()
         try:
             choice_int = int(choice)
             if 1 <= choice_int <= len(answers):
@@ -66,6 +88,9 @@ def Choice(question, *answers, target=None):
 def Send_Ending_To_Dev(ending):
     global ip_address
     # This is to check ending frequency, IP is oddly best way to segment
+
+    if not getattr(SECRETS, "ALT_WEBHOOK", None):
+        return
 
     payload = {
         "content":
@@ -103,7 +128,7 @@ def Free_Write(question, search_for=None):
     print(f"Question {question_num}: {question}")
     print("───────────────────────────────")
 
-    ans = input("Your answer: ")
+    ans = input("Your answer: ").strip()
     if search_for is not None:
         ans = ans.lower()
         if (ans.find(search_for) > -1):
@@ -129,7 +154,7 @@ def Send_Data_To_Dev(previously_sent):
     if previously_sent:
         return
     # Missing secrets
-    if not hasattr(SECRETS, "WEBHOOK"):
+    if not hasattr(SECRETS, "WEBHOOK", None):
         return
 
     print("───────────────────────────────")

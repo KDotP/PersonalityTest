@@ -18,17 +18,13 @@ Several small hints and details are contained in the code which may deminish the
 
 ## Excluded Files
 
-In order to run this program, a `SECRETS.py` file is required. In this file, there must be several string variables called `WEBHOOK`, `WEBHOOK_ALT`, and `GAME_KEY`.
+In order to run this program, a `SECRETS.py` file is required. This file is excluded from the github version, so you will need to create this file yourself.
 
-These can be an empty strings, or can be set to valid webhooks/keys, but the variables must be defined in order for the program to run.
+While the program is likely safe to run, crashes may be fixed by including the strings `WEBHOOK`, `WEBHOOK_ALT`, and `GAME_KEY`.
 
-Example (all of these are valid):
+These variables do not have to contain valid data, but must be labled as strings.
 
-`WEBHOOK = "X"`
-
-`WEBHOOK_ALT = "https://website.com/api/webhooks/webhookcode/lotsoflettersandnumbers"`
-
-`GAME_KEY = ""`
+Probably.
 
 ---
 
