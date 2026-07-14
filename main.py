@@ -39,9 +39,6 @@ def Version_Check():
                 data = json.loads(response.read().decode("utf-8"))
                 
                 latest_version = data.get("tag_name")
-                download_url = data.get("html_url")
-                
-                # 3. Compare version tags
                 if latest_version and latest_version != CURRENT_VERSION:
                     print("Checking for updates... |")
                     print("Checking for updates... /")
@@ -53,10 +50,10 @@ def Version_Check():
                 else:
                     print("Version verified.")
                 
-    except Exception as e:
+    except Exception:
         print(f"Unable to verify version!")
         input("Press enter to continue... ")
-    sys.stdout.write("\033[2J") # Clear screen (ish)
+    print("\n" * 32)
 
 def First_Start():
     global ip_address
