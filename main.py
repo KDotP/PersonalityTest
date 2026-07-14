@@ -21,10 +21,46 @@ except ImportError:
 question_num = 0
 previously_sent_data = False
 ip_address = False
+CURRENT_VERSION = "v0.9.0" # CHANGE ON EVERY UPDATE :)))
+REPO_URL = "https://api.github.com/repos/KDotP/PersonalityTest/releases/latest" # DO NOT CHANGE EVERY UPDATE >:(((
+
+def Version_Check():
+    print(f"Running version: {CURRENT_VERSION}")
+    print("Checking for updates... |") # For the fans
+    print("Checking for updates... /")
+    print("Checking for updates... —")
+    print("Checking for updates... \\")
+    
+    # Actually check
+    try:
+        req = urllib.request.Request(REPO_URL, headers={"User-Agent": "PersonalityTest"})
+        with urllib.request.urlopen(req, timeout=5) as response:
+                # Read the bytes and decode to a string, then parse JSON
+                data = json.loads(response.read().decode("utf-8"))
+                
+                latest_version = data.get("tag_name")
+                download_url = data.get("html_url")
+                
+                # 3. Compare version tags
+                if latest_version and latest_version != CURRENT_VERSION:
+                    print("Checking for updates... |")
+                    print("Checking for updates... /")
+                    print(f"--- Update Available! ({latest_version}) ---")
+                    print(f"Current version: {CURRENT_VERSION}")
+                    
+                    print("Check with developer for the latest version or visit https://github.com/KDotP/PersonalityTest/releases/latest.")
+                    input("Press enter to continue... ")
+                else:
+                    print("Version verified.")
+                
+    except Exception as e:
+        print(f"Unable to verify version!")
+    sys.stdout.write("\033[2J") # Clear screen (ish)
 
 def First_Start():
     global ip_address
     ip_address = get_public_ip() # Required to request version control 
+    Version_Check()
     main()
 
 def Display_Ending(ending_name, ending_lore):
