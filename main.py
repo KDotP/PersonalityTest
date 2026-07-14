@@ -21,7 +21,7 @@ except ImportError:
 question_num = 0
 previously_sent_data = False
 ip_address = False
-CURRENT_VERSION = "v0.9.0" # CHANGE ON EVERY UPDATE :)))
+CURRENT_VERSION = "v1.0.0" # CHANGE ON EVERY UPDATE :)))
 REPO_URL = "https://api.github.com/repos/KDotP/PersonalityTest/releases/latest" # DO NOT CHANGE EVERY UPDATE >:(((
 
 def Version_Check():
@@ -55,6 +55,7 @@ def Version_Check():
                 
     except Exception as e:
         print(f"Unable to verify version!")
+        input("Press enter to continue... ")
     sys.stdout.write("\033[2J") # Clear screen (ish)
 
 def First_Start():
