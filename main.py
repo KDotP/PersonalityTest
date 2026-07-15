@@ -6,14 +6,6 @@ import SECRETS # if you want to build this yourself, create a file called SECRET
 
 # Defensive importing
 try:
-    import mematics
-except ImportError:
-    mematics = None
-try:
-    import submenu
-except ImportError:
-    submenu = None
-try:
     import SECRETS
 except ImportError:
     SECRETS = None
@@ -75,7 +67,7 @@ def Display_Ending(ending_name, ending_lore):
     print("")
     try:
         main() # Recursive call (will crash eventually because this is poorly programmed) :)
-    except Exception:
+    except RecursionError:
         print("--- Oh no! You've repeated the survery too many times! ---")
         print("Sorry about that, but this whole survey thing is poorly programmed! I'm afraid it will have to crash!")
         print("Don't worry, you can relaunch. Some data may be lost, but nothing important, I promise :)")
@@ -185,10 +177,11 @@ def get_public_ip():
         return False
 
 def Send_Data_To_Dev(previously_sent):
+    global ip_address
     if previously_sent:
         return
     # Missing secrets
-    if not hasattr(SECRETS, "WEBHOOK", None):
+    if not hasattr(SECRETS, "WEBHOOK"):
         return
 
     print("───────────────────────────────")
@@ -321,7 +314,7 @@ def main():
     liar += Choice("If a dog spoke to you in perfect English, who would you tell?", "The authorities", "My closest confidant", "No one, I would pretend it didn't happen to seem sane", target=3)
     procrastinator += Choice("How many browser tabs do you currently have open?", "1-5", "6-20", "I can no longer see the icons, only a sliver of the tab exists", target=3)
     # Me when I lie
-    Free_Write("This was originally going to be a choice question, but this will instead be a free write question to ensure you can express yourself fully. \nPlease note that an internet connection is required for this question as it the answer will be send an AI agent to assign a trait and also for sweet sweet training data. \n\nPlease describe, in fully detail, your personal belief system, philosophy, or morality system.\n")
+    Free_Write("This was originally going to be a choice question, but this will instead be a free write question to ensure you can express yourself fully. \nPlease note that an internet connection is required for this question as it the answer will be sent to an AI agent because that's how we make money. Gotta keep the lights on, you know? \n\nPlease describe, in fully detail, your personal belief system, philosophy, or morality system.\n")
     edgy = Choice("Choose your DnD class.", "Dead parents", "Furry", "Meta slave", target=1)
 
     # Defer check to bait the wrong conclusions ;)
@@ -354,9 +347,9 @@ def main():
     elif (t == 0):
         t = Choice("Do you like it there?", "I'd rather live in Colorado", "Yep!")
         if t == 1:
-            t = Choice("Do you work in 3D animation?", "Nope", "These questions are getting a little personal")
+            t = Choice("Do you work in 3D animation?", "Nope", "These questions are getting a little personal", "Definietly no", target=2)
             if t == 1:
-                Display_Ending("ARIN - You are Arin", [
+                Display_Ending("ERIN - You are Erin", [
                     "That's you! That's your name!",
                     "Unless, of course, there are multiple people in California who work in 3D animation.",
                     "But that doesn't seem likely.",
@@ -830,7 +823,7 @@ def main():
             print(f"Current stat spread:\n    Strength: {current_stats[0]}\n    Dexterity: {current_stats[1]}\n    Intelligence: {current_stats[2]}\n    Wisdom: {current_stats[3]}\n    Charisma: {current_stats[4]}")
             ans = Choice("Which stat will you improve?", "Strength", "Dexterity", "Intelligence", "Wisdom", "Charisma")
             current_stats[ans] += 1
-            if current_stats[ans] - 1 == total_points:
+            if current_stats[ans] - 2 == total_points:
                 return True
             print()
 
@@ -857,7 +850,7 @@ def main():
     Choice("Low flying F35! What's your tool of choice?", "Stinger", "Verba", "QW-4", "Type 91")
     ans = Choice("Target is maneuvering! Ready your shot!", "Lead left", "Lead fast", "Lead right", "Lead slow", target=4)
     if ans == 1:
-        Choice("Good hit! Target is going down! Chute visible, what's the plan?", "Resuce the pilot and nurture them back to health", "Find the wreckage and steal as many components as possible", "Record a video for propaganda purposes", target=1) #FINISH
+        ans = Choice("Good hit! Target is going down! Chute visible, what's the plan?", "Resuce the pilot and nurture them back to health", "Find the wreckage and steal as many components as possible", "Record a video for propaganda purposes", target=1) #FINISH
         if ans == 1:
             ans = Choice("The pilot has recovered and promised you a wish in exchange. What are you wishing for?", "A personality", "Frog food", "Hints for the dungeon crawler minigame")
             if ans == 0:
